@@ -222,8 +222,8 @@
       letter-spacing: .2em; color: var(--fg-muted); margin-bottom: 16px;
     }
     .hero-title-big {
-      font-family: 'Galmuri9', 'Noto Sans KR', monospace;
-      font-size: clamp(28px, 5.5vw, 80px);
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      font-size: clamp(22px, 3.8vw, 56px);
       font-weight: 900;
       line-height: 1.35; color: var(--fg); letter-spacing: .01em;
     }
@@ -639,9 +639,14 @@
     .about-char-inline {
       flex: 0 0 72px; height: 116px;
     }
+    /* profile photo + cards row */
+    .about-photo-cards-row {
+      display: flex; align-items: flex-start; gap: 40px;
+      margin-top: 40px; flex-wrap: wrap;
+    }
     /* profile photo */
     .about-profile-photo {
-      width: 200px; margin: 0 0 36px; aspect-ratio: 3/4; overflow: hidden;
+      width: 220px; flex-shrink: 0; aspect-ratio: 3/4; overflow: hidden;
     }
     .about-profile-photo img {
       width: 100%; height: 100%; object-fit: cover; object-position: top; display: block;
@@ -684,24 +689,27 @@
     }
     .about-px-grid {
       display:flex; gap:16px; flex-wrap:wrap;
-      justify-content:center; margin-top:64px;
+      justify-content:flex-start; margin-top:0; flex:1;
+      align-content: flex-start;
     }
     .about-px-card {
       display:flex; flex-direction:column; align-items:stretch;
       cursor:pointer; transition:transform .25s, box-shadow .25s;
-      border-radius:6px; overflow:hidden; width:150px;
+      border-radius:6px; overflow:hidden; width:185px;
+      height: 260px; /* 고정 높이 — 구분선 위치 통일 */
     }
     .about-px-card:hover { transform:translateY(-8px) rotate(-0.5deg); box-shadow:0 14px 36px rgba(0,0,0,0.22); }
     .about-px-icon-wrap {
-      display:flex; align-items:center; justify-content:center;
-      padding:16px; flex:1;
+      display:flex; align-items:flex-end; justify-content:center;
+      padding:18px 9px 36px 19px; flex:1; min-height:0;
     }
-    .about-px-cvs { display:block; image-rendering:pixelated; width:110px; height:110px; }
+    .about-px-cvs { display:block; image-rendering:pixelated; width:128px; height:128px; }
     .about-px-fold {
       padding:10px 14px 12px;
       background:rgba(255,255,255,0.18);
       border-top:1px solid rgba(255,255,255,0.5);
       position:relative;
+      flex-shrink:0; /* fold 높이 고정, 아이콘 영역이 늘어남 */
     }
     .about-px-fold::before {
       content:''; position:absolute; top:4px; left:0; right:0;
@@ -715,7 +723,7 @@
     .about-px-label {
       font-family:'Press Start 2P',monospace; font-size:7px;
       letter-spacing:.1em; color:rgba(0,0,0,0.75);
-      display:block;
+      display:block; white-space:nowrap;
     }
     .about-px-card:hover .about-px-label { color:rgba(0,0,0,1); }
     /* About modal content */
@@ -767,9 +775,11 @@
       display:block; margin: 0 auto 22px;
     }
     @media (max-width:600px) {
-      .about-px-grid { gap:10px; }
-      .about-px-card { width:130px; }
-      .about-px-cvs { width:90px !important; height:90px !important; }
+      .about-photo-cards-row { flex-direction:column; align-items:center; gap:24px; }
+      .about-profile-photo { width:180px; }
+      .about-px-grid { gap:10px; justify-content:center; }
+      .about-px-card { width:160px; height:250px; }
+      .about-px-cvs { width:128px !important; height:128px !important; }
       .about-modal-row { grid-template-columns:78px 1fr; }
     }
 
@@ -872,7 +882,7 @@
       color: var(--muted, #888); margin: 0;
     }
     /* scroll gallery (non-editorial) */
-    .proj-modal-images { display: flex; flex-direction: column; gap: 4px; }
+    .proj-modal-images { display: flex; flex-direction: column; gap: 4px; padding: 0 32px; }
     /* book gallery */
     .proj-book-gallery {
       display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 48px;
@@ -892,6 +902,47 @@
     .proj-modal-video {
       width: 100%; aspect-ratio: 16/9; border: none; border-radius: 4px;
       margin-bottom: 16px;
+    }
+    /* YouTube 썸네일 플레이어 */
+    .proj-yt-thumb {
+      position: relative; width: 100%; aspect-ratio: 16/9;
+      display: block; border-radius: 4px; overflow: hidden;
+      margin-bottom: 4px; cursor: pointer; text-decoration: none;
+    }
+    .proj-yt-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .proj-yt-play {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.25); transition: background .2s;
+    }
+    .proj-yt-thumb:hover .proj-yt-play { background: rgba(0,0,0,0.45); }
+    .proj-yt-play svg { width: 72px; height: 72px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5)); }
+    /* App demo static section */
+    .proj-app-demo-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 80px 0 60px; gap: 32px;
+    }
+    .proj-app-demo-label {
+      font-family: 'Press Start 2P', monospace; font-size: 9px;
+      color: var(--fg-muted); letter-spacing: .15em; text-transform: uppercase;
+    }
+    .proj-app-demo-img {
+      width: 78%; max-width: 600px; display: block; border-radius: 4px;
+    }
+    .proj-app-demo-btn-wrap {
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+    }
+    .proj-app-demo-btn {
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      color: #fff; background: var(--accent);
+      padding: 16px 32px; border: none; cursor: pointer;
+      letter-spacing: 0.05em; text-decoration: none; display: inline-block;
+      transition: opacity .2s;
+    }
+    .proj-app-demo-btn:hover { opacity: 0.75; }
+    .proj-app-demo-hint {
+      font-family: 'Pretendard', sans-serif; font-size: 12px;
+      color: var(--fg-muted); letter-spacing: .05em;
     }
     /* editorial page-turn viewer */
     .proj-page-viewer {
@@ -929,6 +980,8 @@
       .proj-modal-inner { padding: 24px 0 60px; }
       .proj-modal-header { padding: 0 16px 20px; }
       .proj-modal-nav { padding: 12px 16px; }
+      .proj-modal-images { padding: 0 16px; }
+      .proj-app-demo-img { width: 88%; }
     }
 
     /* ─── BOOK VIEWER (page-curl spread) ─── */
@@ -1156,7 +1209,7 @@
       .hero-status { left: 24px; }
       .paint-toolbar { right: 24px; top: 84px; }
       .hero-content { padding: 0 24px 40px; }
-      .hero-title-big { font-size: clamp(24px, 9vw, 48px); }
+      .hero-title-big { font-size: clamp(20px, 7vw, 40px); }
       .hero-bottom { grid-template-columns: 1fr; gap: 20px; }
       .hero-stats { justify-content: flex-start; }
       .scroll-hint { display: none; }
@@ -1214,7 +1267,7 @@
       .mobile-only { display: inline; }
       .hero-title-small { font-size: 10px; letter-spacing: .12em; }
       /* Big title: fill most of screen width, allow ~2 pixel-cells margin each side */
-      .hero-title-big { font-size: clamp(24px, 8vw, 42px); text-align: left; }
+      .hero-title-big { font-size: clamp(20px, 7vw, 36px); text-align: left; }
       .hero-title-big span { white-space: nowrap; }
       .hero-status { display: none; }
 
@@ -1451,7 +1504,7 @@
     }
 
     @media (max-width: 480px) {
-      .hero-title-big { font-size: clamp(22px, 8vw, 36px); }
+      .hero-title-big { font-size: clamp(18px, 7vw, 30px); }
       .hero-status { display: none; }
       .color-swatch { width: 20px; height: 20px; }
       .size-btn { width: 24px; height: 24px; font-size: 10px; }
@@ -1698,7 +1751,6 @@
   <div class="hero-content">
     <p class="hero-title-small">// LEE YOUNGJU ·<br class="mobile-only"> PORTFOLIO 2026</p>
     <div class="hero-title-big">
-      <span class="glitch" data-text="브랜드의 언어를 사람의 경험으로.">브랜드의 언어를 사람의 경험으로.</span><br>
       <span class="glitch acc" data-text="작은 경험을 하나의 픽셀처럼 쌓아,">작은 경험을 하나의 픽셀처럼 쌓아,</span><br>
       <span class="glitch" data-text="브랜드와 사람을 연결하는 디자이너 이영주">브랜드와 사람을 연결하는 디자이너 이영주</span>
     </div>
@@ -1754,8 +1806,7 @@
     <div class="phil-card">
       <p class="phil-num">// 01</p>
       <p class="phil-text">
-        <strong>브랜드의 언어를 사람의 경험으로.<br>
-        작은 경험을 하나의 픽셀처럼 쌓아,<br>
+        <strong>작은 경험을 하나의 픽셀처럼 쌓아,<br>
         브랜드와 사람을 연결하는 디자이너 이영주</strong><br><br>
         하나의 픽셀이 모여 하나의 형태 또는 화면을 완성하듯,<br>
         모든 디자인은 작은 아이디어에서 시작됩니다.<br><br>
@@ -1815,19 +1866,12 @@
 <section class="about-me" id="about">
   <p class="section-label reveal">ABOUT ME</p>
 
-  <!-- intro: description text -->
-  <div class="about-intro-row reveal">
-    <p class="about-px-subtitle" style="font-family:'Galmuri9','Pretendard','Noto Sans KR',sans-serif;font-size:16px;line-height:1.7;">브랜드의 언어를 사람의 경험으로. 작은 경험을 하나의 픽셀처럼 쌓아, 브랜드와 사람을 연결하는 디자이너 이영주.</p>
-  </div>
-
-  <!-- profile photo -->
-  <div class="about-profile-photo reveal">
-    <img src="내 사진.png" alt="이영주 프로필">
-  </div>
-
-  <p class="about-px-subtitle reveal" style="margin-top:32px">// 아이콘을 클릭하면 자세한 정보를 볼 수 있어요</p>
-
-  <div class="about-px-grid reveal" id="aboutPxGrid">
+  <!-- profile photo + cards row -->
+  <div class="about-photo-cards-row reveal">
+    <div class="about-profile-photo">
+      <img src="내 사진.png" alt="이영주 프로필">
+    </div>
+    <div class="about-px-grid" id="aboutPxGrid">
     <div class="about-px-card" data-key="intro" style="background:#FF3B00">
       <div class="about-px-icon-wrap">
         <canvas class="about-px-cvs" id="apx-intro" width="190" height="190"></canvas>
@@ -1864,7 +1908,9 @@
         <span class="about-px-label">→ AWARDS</span>
       </div>
     </div>
+    <p class="about-px-subtitle" style="width:100%;margin-top:16px;text-align:center">// 아이콘을 클릭하면 자세한 정보를 볼 수 있어요</p>
   </div>
+  </div><!-- end about-photo-cards-row -->
 </section>
 
 
@@ -2231,6 +2277,185 @@
 </section>
 
 
+<!-- AI TOOLS -->
+<section class="tools-section" id="aitools">
+  <p class="section-label reveal">AI TOOLS</p>
+  <div class="tools-icon-grid reveal">
+
+    <!-- Gemini -->
+    <div class="tool-icon-item">
+      <div class="tool-px-icon" style="background:#0d0d0d">
+        <svg viewBox="0 0 20 20" width="56" height="56" shape-rendering="crispEdges" style="image-rendering:pixelated;display:block">
+          <!-- rainbow 4-pointed star: connected arms + diagonal joins -->
+          <!-- Top arm: red -->
+          <rect x="9" y="2" width="2" height="2" fill="#FF0000"/>
+          <rect x="9" y="4" width="2" height="2" fill="#FF2200"/>
+          <rect x="9" y="6" width="2" height="2" fill="#FF5500"/>
+          <!-- Upper diagonals -->
+          <rect x="7" y="7" width="2" height="2" fill="#FF9900"/>
+          <rect x="11" y="7" width="2" height="2" fill="#FF3300"/>
+          <!-- Center quad -->
+          <rect x="8" y="8" width="2" height="2" fill="#FFAA00"/>
+          <rect x="10" y="8" width="2" height="2" fill="#FF4400"/>
+          <rect x="8" y="10" width="2" height="2" fill="#00CC55"/>
+          <rect x="10" y="10" width="2" height="2" fill="#0055EE"/>
+          <!-- Lower diagonals -->
+          <rect x="7" y="11" width="2" height="2" fill="#00BB44"/>
+          <rect x="11" y="11" width="2" height="2" fill="#0044CC"/>
+          <!-- Bottom arm: teal -->
+          <rect x="9" y="12" width="2" height="2" fill="#00BBCC"/>
+          <rect x="9" y="14" width="2" height="2" fill="#00AACC"/>
+          <rect x="9" y="16" width="2" height="2" fill="#009999"/>
+          <!-- Left arm: yellow-green -->
+          <rect x="2" y="9" width="2" height="2" fill="#FFEE00"/>
+          <rect x="4" y="9" width="2" height="2" fill="#AAEE00"/>
+          <rect x="6" y="9" width="2" height="2" fill="#55DD00"/>
+          <!-- Right arm: blue-purple -->
+          <rect x="12" y="9" width="2" height="2" fill="#0044FF"/>
+          <rect x="14" y="9" width="2" height="2" fill="#3322DD"/>
+          <rect x="16" y="9" width="2" height="2" fill="#6611CC"/>
+        </svg>
+      </div>
+      <span class="tool-icon-label">Gemini</span>
+    </div>
+
+    <!-- Perplexity -->
+    <div class="tool-icon-item">
+      <div class="tool-px-icon" style="background:#0d0d0d">
+        <svg viewBox="0 0 20 20" width="56" height="56" shape-rendering="crispEdges" style="image-rendering:pixelated;display:block">
+          <!-- solid 4-pointed diamond star -->
+          <rect x="9" y="2" width="2" height="2" fill="#fff"/>
+          <rect x="8" y="4" width="4" height="2" fill="#fff"/>
+          <rect x="7" y="6" width="6" height="2" fill="#fff"/>
+          <rect x="6" y="8" width="8" height="4" fill="#fff"/>
+          <rect x="7" y="12" width="6" height="2" fill="#fff"/>
+          <rect x="8" y="14" width="4" height="2" fill="#fff"/>
+          <rect x="9" y="16" width="2" height="2" fill="#fff"/>
+          <rect x="2" y="9" width="2" height="2" fill="#fff"/>
+          <rect x="4" y="8" width="2" height="4" fill="#fff"/>
+          <rect x="6" y="7" width="2" height="6" fill="#fff"/>
+          <rect x="16" y="9" width="2" height="2" fill="#fff"/>
+          <rect x="14" y="8" width="2" height="4" fill="#fff"/>
+          <rect x="12" y="7" width="2" height="6" fill="#fff"/>
+        </svg>
+      </div>
+      <span class="tool-icon-label">Perplexity</span>
+    </div>
+
+    <!-- ChatGPT -->
+    <div class="tool-icon-item">
+      <div class="tool-px-icon" style="background:#0d0d0d">
+        <svg viewBox="0 0 20 20" width="56" height="56" shape-rendering="crispEdges" style="image-rendering:pixelated;display:block">
+          <!-- octagon outline + inner cross: OpenAI/ChatGPT mark -->
+          <rect x="7" y="2" width="6" height="2" fill="#fff"/>
+          <rect x="13" y="4" width="4" height="2" fill="#fff"/>
+          <rect x="15" y="6" width="2" height="8" fill="#fff"/>
+          <rect x="13" y="14" width="4" height="2" fill="#fff"/>
+          <rect x="7" y="16" width="6" height="2" fill="#fff"/>
+          <rect x="3" y="14" width="4" height="2" fill="#fff"/>
+          <rect x="3" y="6" width="2" height="8" fill="#fff"/>
+          <rect x="3" y="4" width="4" height="2" fill="#fff"/>
+          <rect x="8" y="8" width="4" height="4" fill="#fff"/>
+          <rect x="9" y="5" width="2" height="3" fill="#fff"/>
+          <rect x="9" y="12" width="2" height="3" fill="#fff"/>
+          <rect x="5" y="9" width="3" height="2" fill="#fff"/>
+          <rect x="12" y="9" width="3" height="2" fill="#fff"/>
+        </svg>
+      </div>
+      <span class="tool-icon-label">ChatGPT</span>
+    </div>
+
+    <!-- Claude -->
+    <div class="tool-icon-item">
+      <div class="tool-px-icon" style="background:#CC4422">
+        <svg viewBox="0 0 20 20" width="56" height="56" shape-rendering="crispEdges" style="image-rendering:pixelated;display:block">
+          <!-- irregular starburst: Claude/Anthropic mark -->
+          <rect x="8" y="8" width="4" height="4" fill="#fff"/>
+          <!-- N ray (long) -->
+          <rect x="9" y="2" width="2" height="6" fill="#fff"/>
+          <!-- S ray (medium) -->
+          <rect x="9" y="12" width="2" height="4" fill="#fff"/>
+          <!-- E ray (medium) -->
+          <rect x="12" y="9" width="5" height="2" fill="#fff"/>
+          <!-- W ray (medium) -->
+          <rect x="3" y="9" width="5" height="2" fill="#fff"/>
+          <!-- NE jagged -->
+          <rect x="13" y="4" width="3" height="2" fill="#fff"/>
+          <rect x="12" y="5" width="2" height="2" fill="#fff"/>
+          <!-- NW jagged -->
+          <rect x="4" y="4" width="3" height="2" fill="#fff"/>
+          <rect x="5" y="5" width="2" height="2" fill="#fff"/>
+          <!-- SE jagged -->
+          <rect x="13" y="13" width="3" height="2" fill="#fff"/>
+          <rect x="12" y="12" width="2" height="2" fill="#fff"/>
+          <!-- SW jagged -->
+          <rect x="4" y="13" width="3" height="2" fill="#fff"/>
+          <rect x="5" y="12" width="2" height="2" fill="#fff"/>
+        </svg>
+      </div>
+      <span class="tool-icon-label">Claude</span>
+    </div>
+
+    <!-- Firefly -->
+    <div class="tool-icon-item">
+      <div class="tool-px-icon" style="background:#CC1A1A">
+        <svg viewBox="0 0 20 20" width="56" height="56" shape-rendering="crispEdges" style="image-rendering:pixelated;display:block">
+          <!-- F letter -->
+          <rect x="3" y="5" width="5" height="2" fill="#ffffff"/>
+          <rect x="3" y="8" width="4" height="2" fill="#ffffff"/>
+          <rect x="3" y="11" width="2" height="4" fill="#ffffff"/>
+          <!-- i -->
+          <rect x="10" y="5" width="2" height="2" fill="#ffffff"/>
+          <rect x="10" y="8" width="2" height="7" fill="#ffffff"/>
+          <!-- * -->
+          <rect x="13" y="5" width="2" height="2" fill="#ffffff"/>
+          <rect x="12" y="6" width="4" height="1" fill="#ffffff"/>
+          <rect x="14" y="4" width="1" height="4" fill="#ffffff"/>
+        </svg>
+      </div>
+      <span class="tool-icon-label">Firefly</span>
+    </div>
+
+    <!-- Stitch -->
+    <div class="tool-icon-item">
+      <div class="tool-px-icon" style="background:linear-gradient(180deg,#0a0a1a 0%,#1a4a8a 100%)">
+        <svg viewBox="0 0 20 20" width="56" height="56" shape-rendering="crispEdges" style="image-rendering:pixelated;display:block">
+          <!-- robot face capsule -->
+          <rect x="4" y="7" width="12" height="7" fill="#ffffff"/>
+          <rect x="5" y="6" width="10" height="1" fill="#ffffff"/>
+          <rect x="5" y="14" width="10" height="1" fill="#ffffff"/>
+          <rect x="3" y="8" width="1" height="5" fill="#dddddd"/>
+          <rect x="16" y="8" width="1" height="5" fill="#dddddd"/>
+          <!-- eyes -->
+          <rect x="6" y="9" width="3" height="3" fill="#1a1a2e"/>
+          <rect x="11" y="9" width="3" height="3" fill="#1a1a2e"/>
+          <rect x="7" y="10" width="1" height="1" fill="#4488ff"/>
+          <rect x="12" y="10" width="1" height="1" fill="#4488ff"/>
+        </svg>
+      </div>
+      <span class="tool-icon-label">Stitch</span>
+    </div>
+
+    <!-- Nanobana -->
+    <div class="tool-icon-item">
+      <div class="tool-px-icon" style="background:#F5C200">
+        <svg viewBox="0 0 20 20" width="56" height="56" shape-rendering="crispEdges" style="image-rendering:pixelated;display:block">
+          <!-- B letter bold -->
+          <rect x="4" y="4" width="3" height="12" fill="#1a1a1a"/>
+          <rect x="7" y="4" width="4" height="2" fill="#1a1a1a"/>
+          <rect x="11" y="6" width="2" height="4" fill="#1a1a1a"/>
+          <rect x="7" y="9" width="4" height="2" fill="#1a1a1a"/>
+          <rect x="11" y="11" width="2" height="4" fill="#1a1a1a"/>
+          <rect x="7" y="14" width="4" height="2" fill="#1a1a1a"/>
+        </svg>
+      </div>
+      <span class="tool-icon-label">Nanobana</span>
+    </div>
+
+  </div>
+</section>
+
+
 <!-- WORK -->
 <section class="work" id="work">
   <div class="work-header reveal">
@@ -2254,7 +2479,7 @@
       <img class="work-img" src="사이_썸네일.png" alt="sai 사이">
       <div class="work-overlay">
         <div class="work-info">
-          <span class="work-tag">UX/UI · MOBILE APP</span>
+          <span class="work-tag">UX/UI · APP BRAND BOOK</span>
           <p class="work-name">sai 사이</p>
           <p class="work-sub">모바일 앱 디자인</p>
         </div>
@@ -2264,7 +2489,7 @@
       <img class="work-img" src="외계인방앗간_썸네일.jpg" alt="외계인방앗간">
       <div class="work-overlay">
         <div class="work-info">
-          <span class="work-tag">BRANDING · PACKAGE</span>
+          <span class="work-tag">REBRANDING · PACKAGE</span>
           <p class="work-name">외계인방앗간 [RE]</p>
           <p class="work-sub">쌀 베이커리 카페 리브랜딩 · 푸드 캐리어 패키지</p>
         </div>
@@ -2280,13 +2505,13 @@
         </div>
       </div>
     </div>
-    <div class="work-item" data-id="innisfree" data-category="content" data-project="innisfree">
-      <img class="work-img" src="이니스프리_썸넬.png" alt="이니스프리 이벤트">
+    <div class="work-item" data-id="innisfree" data-category="uxui" data-project="innisfree">
+      <img class="work-img" src="이니스프리_썸넬.png" alt="이니스프리">
       <div class="work-overlay">
         <div class="work-info">
-          <span class="work-tag">SNS DESIGN</span>
-          <p class="work-name">이니스프리 이벤트</p>
-          <p class="work-sub">SNS 이벤트 디자인 [팀]</p>
+          <span class="work-tag">UX/UI DESIGN</span>
+          <p class="work-name">FIND YOUR ISLE</p>
+          <p class="work-sub">이니스프리 이벤트 디자인</p>
         </div>
       </div>
     </div>
@@ -2294,19 +2519,19 @@
       <img class="work-img" src="FE26_썸네일.jpg" alt="Fe26 REINFORCE">
       <div class="work-overlay">
         <div class="work-info">
-          <span class="work-tag">MOTION · VIDEO</span>
+          <span class="work-tag">MOTION</span>
           <p class="work-name">Fe26 : REINFORCE</p>
           <p class="work-sub">26기 졸업전시회 영상 디자인</p>
         </div>
       </div>
     </div>
-    <div class="work-item" data-id="noww" data-category="uxui">
-      <div class="work-ph ph-wide" style="width:100%;height:100%;aspect-ratio:unset;min-height:unset">작업물 이미지</div>
+    <div class="work-item" data-id="noww" data-category="uxui" data-project="noww" style="cursor:pointer">
+      <img class="work-img" src="NOWW 썸네일.png" alt="NOWW">
       <div class="work-overlay">
         <div class="work-info">
-          <span class="work-tag">UX/UI · MOBILE APP</span>
-          <p class="work-name">NOWW 나우</p>
-          <p class="work-sub">모바일 앱 디자인</p>
+          <span class="work-tag">UX/UI · APP</span>
+          <p class="work-name">NOWW</p>
+          <p class="work-sub">트렌드 큐레이션 앱 UX/UI 디자인</p>
         </div>
       </div>
     </div>
@@ -2314,9 +2539,9 @@
       <img class="work-img" src="인연_썸네일.jpg" alt="인연">
       <div class="work-overlay">
         <div class="work-info">
-          <span class="work-tag">BRANDING</span>
+          <span class="work-tag">BRANDING · PACKAGE</span>
           <p class="work-name">인연 因緣 / #WITH</p>
-          <p class="work-sub">브랜딩 · 장신구 패키지 · 팝업스토어</p>
+          <p class="work-sub">브랜딩 · 장신구 패키지 · 팝업스토어 굿즈</p>
         </div>
       </div>
     </div>
@@ -2336,7 +2561,7 @@
         <div class="work-info">
           <span class="work-tag">PACKAGE DESIGN</span>
           <p class="work-name">만두 속 오징어순대</p>
-          <p class="work-sub">식품 패키지 디자인</p>
+          <p class="work-sub">간편식 패키지 디자인</p>
         </div>
       </div>
     </div>
@@ -2344,7 +2569,7 @@
       <img class="work-img" src="PEWiM 퓨림_썸네일.jpg" alt="PEWiM 퓨림">
       <div class="work-overlay">
         <div class="work-info">
-          <span class="work-tag">UX/UI · MOBILE APP</span>
+          <span class="work-tag">UX/UI · APP</span>
           <p class="work-name">PEWiM 퓨림</p>
           <p class="work-sub">반려동물 행복 애플리케이션 디자인</p>
         </div>
@@ -2391,21 +2616,31 @@
       </div>
     </div>
     <div class="work-item" data-id="meltyness" data-category="branding" data-project="meltyness">
-      <img class="work-img" src="멜티키스_썸네일.jpg" alt="슈퍼말차 마이노멀">
+      <img class="work-img" src="멜티키스_썸네일.jpg" alt="멜티키스 사르르 White">
       <div class="work-overlay">
         <div class="work-info">
           <span class="work-tag">PACKAGE DESIGN</span>
-          <p class="work-name">슈퍼말차 마이노멀</p>
+          <p class="work-name">멜티키스 사르르 White</p>
           <p class="work-sub">말차 음료 패키지 디자인</p>
         </div>
       </div>
     </div>
-    <div class="work-item" data-id="jibang" data-category="content" data-project="jibang">
-      <img class="work-img" src="당 충전 아니고 지방 + 충전_썸네일.jpg" alt="지방 + 충전">
+    <div class="work-item" data-id="supermatcha" data-category="branding" data-project="supermatcha">
+      <img class="work-img" src="슈퍼말차 썸네일.png" alt="슈퍼말차X마이노멀">
       <div class="work-overlay">
         <div class="work-info">
-          <span class="work-tag">SNS DESIGN</span>
-          <p class="work-name">지방 + 충전</p>
+          <span class="work-tag">PACKAGE DESIGN</span>
+          <p class="work-name">슈퍼말차X마이노멀</p>
+          <p class="work-sub">과일 잼 말차 티 쿠키 세트</p>
+        </div>
+      </div>
+    </div>
+    <div class="work-item" data-id="jibang" data-category="content" data-project="jibang">
+      <img class="work-img" src="당 충전 아니고 지방 + 충전_썸네일.jpg" alt="당 충전 아니고 지방+ 충전">
+      <div class="work-overlay">
+        <div class="work-info">
+          <span class="work-tag">POSTER DESIGN</span>
+          <p class="work-name">당 충전 아니고 지방+ 충전</p>
           <p class="work-sub">SNS 콘텐츠 디자인</p>
         </div>
       </div>
@@ -2456,17 +2691,31 @@
 </footer>
 
 <script>
+  // ─── SCROLL TO TOP ON REFRESH, RESTORE ON BACK ───
+  history.scrollRestoration = 'manual';
+  window.addEventListener('pageshow', function(e) {
+    if (e.persisted) {
+      // 뒤로가기(bfcache) → 이전 위치 복원
+      const saved = sessionStorage.getItem('_scrollY');
+      if (saved) window.scrollTo(0, parseInt(saved));
+    } else {
+      // 새로고침 / 첫 진입 → 히어로 맨 위로
+      window.scrollTo(0, 0);
+    }
+  });
+  window.addEventListener('pagehide', function() {
+    sessionStorage.setItem('_scrollY', window.scrollY);
+  });
+
   // ─── THEME ───
   const html = document.documentElement;
-  // Auto time-based: 06:00–18:59 → light / 19:00–05:59 → dark
-  function getAutoTheme() {
-    const h = new Date().getHours();
-    return (h >= 6 && h < 19) ? 'light' : 'dark';
-  }
-  html.setAttribute('data-theme', getAutoTheme());
+  // 기본값: 라이트 모드. 세션 내 토글 상태 유지.
+  const savedTheme = sessionStorage.getItem('_theme') || 'light';
+  html.setAttribute('data-theme', savedTheme);
   function toggleTheme() {
     const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
     html.setAttribute('data-theme', next);
+    sessionStorage.setItem('_theme', next);
     document.getElementById('fgSwatch').style.background = next === 'dark' ? '#F5F4F0' : '#0A0A0A';
     syncTheme();
   }
@@ -2681,7 +2930,7 @@
       });
     } else {
       // ── DESKTOP: 4 quadrant positions ──
-      const CYCLE = 400;
+      const CYCLE = 600;
       artItems = ART_DEFS.map((def, i) => {
         const pad = 6;
         const ph = def.pattern.length;
@@ -2696,7 +2945,7 @@
           ...def,
           offR: positions[i].offR,
           offC: positions[i].offC,
-          frame: (ART_RISE + ART_HOLD + ART_FALL) + Math.floor((3 - i) * 32),
+          frame: (ART_RISE + ART_HOLD + ART_FALL) + Math.floor((3 - i) * 150),
           _cycle: CYCLE,
         };
       });
@@ -3152,10 +3401,10 @@
 
   // Per-category display order (data-id values)
   const FILTER_ORDER = {
-    branding:  ['gguwun','waegein','with','mandu','meltyness'],
+    branding:  ['supermatcha','gguwun','waegein','with','mandu','meltyness'],
     uxui:      ['noww','sai','innisfree','pewim','jeongban'],
     editorial: ['dance','airplane'],
-    content:   ['innisfree','emart','fe26','hamilton','jibang','elderly']
+    content:   ['emart','fe26','hamilton','jibang','elderly']
   };
 
   // Click to open project detail (delegate so clones also work)
@@ -3415,7 +3664,7 @@
       s1.style.cssText = 'opacity:1;background:var(--bg)';
       s1.innerHTML = `
         <p style="font-family:'Press Start 2P',monospace;font-size:9px;color:var(--accent);letter-spacing:.1em">ABOUT ME</p>
-        <p style="font-family:'Pretendard','Noto Sans KR',sans-serif;font-size:clamp(20px,6vw,26px);font-weight:700;line-height:1.5;color:var(--fg)">브랜드의 언어를 사람의 경험으로.<br>작은 경험을 하나의 픽셀처럼 쌓아,<br>브랜드와 사람을 연결하는 디자이너 이영주.</p>`;
+        <p style="font-family:'Pretendard','Noto Sans KR',sans-serif;font-size:clamp(20px,6vw,26px);font-weight:700;line-height:1.5;color:var(--fg)">작은 경험을 하나의 픽셀처럼 쌓아,<br>브랜드와 사람을 연결하는 디자이너 이영주.</p>`;
       if (existingPhoto) {
         const imgClone = existingPhoto.cloneNode(true);
         imgClone.style.cssText = 'width:100%;flex:1;object-fit:cover;object-position:top;min-height:0';
@@ -3428,7 +3677,7 @@
       s2.style.cssText = 'opacity:0;background:var(--surface)';
       s2.innerHTML = `
         <p style="font-family:'Press Start 2P',monospace;font-size:9px;color:var(--accent);letter-spacing:.1em;margin-bottom:18px">// SELF INTRODUCTION</p>
-        <p style="font-family:'Pretendard','Noto Sans KR',sans-serif;font-size:clamp(15px,5vw,22px);font-weight:700;line-height:1.4;color:var(--fg);margin-bottom:20px">브랜드의 언어를 사람의 경험으로. 작은 경험을 하나의 픽셀처럼 쌓아, 브랜드와 사람을 연결하는 디자이너 이영주.</p>
+        <p style="font-family:'Pretendard','Noto Sans KR',sans-serif;font-size:clamp(15px,5vw,22px);font-weight:700;line-height:1.4;color:var(--fg);margin-bottom:20px">작은 경험을 하나의 픽셀처럼 쌓아, 브랜드와 사람을 연결하는 디자이너 이영주.</p>
         <div style="margin-bottom:14px">
           <p style="font-family:'Press Start 2P',monospace;font-size:8px;color:var(--accent);letter-spacing:.08em;margin-bottom:7px">// 지원 동기</p>
           <p style="font-family:'Pretendard','Noto Sans KR',sans-serif;font-size:14px;font-weight:300;line-height:1.9;color:var(--fg-muted)">브랜드 디자이너로서 작은 아이디어 하나가 사람들의 삶에 닿는 순간을 경험하며 이 일에 확신을 갖게 되었습니다. 대학 4년간 브랜딩, 패키지, UX/UI, 에디토리얼 등 다양한 분야를 경험하면서 '브랜드의 얼굴을 디자인한다'는 것이 곧 사람들의 경험을 설계하는 일임을 깊이 이해했습니다.</p>
@@ -3693,7 +3942,7 @@
 // ─── PROJECT DATA ───
 const PROJECTS = {
   waegein: {
-    tag: 'BRANDING · PACKAGE',
+    tag: 'REBRANDING · PACKAGE',
     title: '외계인방앗간 [RE]',
     sub: '쌀 베이커리 카페 리브랜딩 · 푸드 캐리어 패키지',
     images: [
@@ -3705,7 +3954,7 @@ const PROJECTS = {
     ]
   },
   with: {
-    tag: 'BRANDING',
+    tag: 'BRANDING · PACKAGE',
     title: '인연 因緣 / #WITH',
     sub: '브랜딩 · 퓨전 장신구 어리끈 패키지 · 팝업스토어 디지털 굿즈',
     images: [
@@ -3727,7 +3976,7 @@ const PROJECTS = {
     ]
   },
   pewim: {
-    tag: 'UX/UI · MOBILE APP',
+    tag: 'UX/UI · APP',
     title: 'PEWiM 퓨림',
     sub: '소중한 가족 반려동물과 행복한 하루 애플리케이션',
     images: [
@@ -3789,12 +4038,12 @@ const PROJECTS = {
     sub: '에어버스 · 보잉 탑승자를 위한 항공기 구조와 작동 원리의 비밀 소책자 리디자인',
     images: [
       '비행기/비행기1.jpg',
-      '비행기/비행기2.png',
+      '비행기/비행기2.jpg',
       '비행기/비행기3.jpg'
     ]
   },
   sai: {
-    tag: 'UX/UI · MOBILE APP',
+    tag: 'UX/UI · APP BRAND BOOK',
     title: 'sai 사이',
     sub: '모바일 앱 디자인',
     type: 'book',
@@ -3810,26 +4059,36 @@ const PROJECTS = {
     })()
   },
   innisfree: {
-    tag: 'SNS DESIGN',
-    title: '이니스프리 이벤트',
-    sub: 'SNS 이벤트 디자인 [팀]',
-    type: 'pdf',
-    pdfSrc: '이니스프리.pdf'
+    tag: 'UX/UI DESIGN',
+    title: 'FIND YOUR ISLE',
+    sub: '이니스프리 이벤트 디자인',
+    images: [
+      '이니스프리/page-01.jpg','이니스프리/page-02.jpg','이니스프리/page-03.jpg',
+      '이니스프리/page-04.jpg','이니스프리/page-05.jpg','이니스프리/page-06.jpg',
+      '이니스프리/page-07.jpg','이니스프리/page-08.jpg','이니스프리/page-09.jpg',
+      '이니스프리/page-10.jpg','이니스프리/page-11.jpg','이니스프리/page-12.jpg',
+      '이니스프리/page-13.jpg'
+    ]
   },
   emart: {
     tag: 'SNS DESIGN',
     title: '이마트 카드뉴스',
     sub: 'SNS 이미지 리디자인',
-    type: 'pdf',
-    pdfSrc: '이마트 카드뉴스 sns이미지 리디자인.pdf'
+    images: [
+      '이마트/page-01.jpg','이마트/page-02.jpg','이마트/page-03.jpg','이마트/page-04.jpg',
+      '이마트/page-05.jpg','이마트/page-06.jpg','이마트/page-07.jpg','이마트/page-08.jpg',
+      '이마트/page-09.jpg','이마트/page-10.jpg','이마트/page-11.jpg','이마트/page-12.jpg',
+      '이마트/page-13.jpg','이마트/page-14.jpg'
+    ]
   },
   fe26: {
-    tag: 'MOTION · VIDEO',
+    tag: 'MOTION',
     title: 'Fe26 : REINFORCE',
     sub: '대진대학교 시각디자인 26기 졸업전시회 영상',
+    imagesFirst: true,
     videos: [
-      '//www.youtube.com/embed/qm1jdWuWCJg',
-      '//www.youtube.com/embed/X8hN5O66DGc'
+      'https://youtu.be/qm1jdWuWCJg',
+      'https://youtu.be/X8hN5O66DGc'
     ],
     images: [
       'FE26/FE26_1.jpg',
@@ -3839,7 +4098,7 @@ const PROJECTS = {
   },
   meltyness: {
     tag: 'PACKAGE DESIGN',
-    title: '슈퍼말차 마이노멀',
+    title: '멜티키스 사르르 White',
     sub: '말차 음료 패키지 디자인',
     images: [
       '멜티키스/멜티키스_1.jpg',
@@ -3849,7 +4108,7 @@ const PROJECTS = {
   mandu: {
     tag: 'PACKAGE DESIGN',
     title: '만두 속 오징어순대',
-    sub: '식품 패키지 디자인',
+    sub: '간편식 패키지 디자인',
     images: [
       '만두 속 오징어순대/만두 속 오징어순대1.jpg',
       '만두 속 오징어순대/만두 속 오징어순대2.jpg',
@@ -3857,11 +4116,48 @@ const PROJECTS = {
     ]
   },
   jibang: {
-    tag: 'SNS DESIGN',
-    title: '지방 + 충전',
-    sub: 'SNS 콘텐츠 디자인',
+    tag: 'POSTER DESIGN',
+    title: '당 충전 아니고 지방+ 충전',
+    sub: '포스터 디자인',
     images: [
       '지방.jpg'
+    ]
+  },
+  noww: {
+    tag: 'UX/UI · APP',
+    title: 'NOWW',
+    sub: '트렌드 큐레이션 앱 UX/UI 디자인',
+    demoImg: 'NOWW 앱 목업.png',
+    demoLink: 'https://project-noww.netlify.app',
+    demoText: 'NOWW 앱을 실행해보세요.',
+    images: [
+      'NOWW/page-01.jpg','NOWW/page-02.jpg','NOWW/page-03.jpg','NOWW/page-04.jpg',
+      'NOWW/page-05.jpg','NOWW/page-06.jpg','NOWW/page-07.jpg','NOWW/page-08.jpg',
+      'NOWW/page-09.jpg','NOWW/page-10.jpg','NOWW/page-11.jpg','NOWW/page-12.jpg',
+      'NOWW/page-13.jpg','NOWW/page-14.jpg','NOWW/page-15.jpg','NOWW/page-16.jpg',
+      'NOWW/page-17.jpg','NOWW/page-18.jpg','NOWW/page-19.jpg','NOWW/page-20.jpg',
+      'NOWW/page-21.jpg','NOWW/page-22.jpg','NOWW/page-23.jpg','NOWW/page-24.jpg',
+      'NOWW/page-25.jpg','NOWW/page-26.jpg','NOWW/page-27.jpg','NOWW/page-28.jpg',
+      'NOWW/page-29.jpg','NOWW/page-30.jpg','NOWW/page-31.jpg','NOWW/page-32.jpg'
+    ]
+  },
+  supermatcha: {
+    tag: 'PACKAGE DESIGN',
+    title: '슈퍼말차X마이노멀',
+    sub: '말차와 저당 잼 4종 조합의 티 쿠키 세트',
+    images: [
+      '슈퍼말차/page-01.jpg',
+      '슈퍼말차/page-02.jpg',
+      '슈퍼말차/page-03.jpg',
+      '슈퍼말차/page-04.jpg',
+      '슈퍼말차/page-05.jpg',
+      '슈퍼말차/page-06.jpg',
+      '슈퍼말차/page-07.jpg',
+      '슈퍼말차/page-08.jpg',
+      '슈퍼말차/page-09.jpg',
+      '슈퍼말차/page-10.jpg',
+      '슈퍼말차/page-11.jpg',
+      '슈퍼말차/page-12.jpg'
     ]
   }
 };
@@ -3974,24 +4270,56 @@ const PROJECTS = {
       imagesEl.appendChild(viewer);
 
     } else {
-      // videos first
-      if (p.videos) {
-        p.videos.forEach(src => {
-          const iframe = document.createElement('iframe');
-          iframe.src = 'https:' + src;
-          iframe.className = 'proj-modal-video';
-          iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-          iframe.allowFullscreen = true;
-          imagesEl.appendChild(iframe);
+      const renderVideos = () => {
+        if (p.videos) {
+          p.videos.forEach(src => {
+            // YouTube URL → 썸네일 + 클릭 시 새 탭 열기
+            const ytMatch = src.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([A-Za-z0-9_-]{11})/);
+            if (ytMatch) {
+              const vid = ytMatch[1];
+              const a = document.createElement('a');
+              a.className = 'proj-yt-thumb';
+              a.href = 'https://www.youtube.com/watch?v=' + vid;
+              a.target = '_blank';
+              a.rel = 'noopener';
+              const thumb = document.createElement('img');
+              thumb.src = 'https://img.youtube.com/vi/' + vid + '/maxresdefault.jpg';
+              thumb.alt = p.title || 'video';
+              // maxresdefault 없으면 hqdefault 폴백
+              thumb.onerror = function() { this.src = 'https://img.youtube.com/vi/' + vid + '/hqdefault.jpg'; };
+              const play = document.createElement('div');
+              play.className = 'proj-yt-play';
+              play.innerHTML = '<svg viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg"><rect width="68" height="48" rx="10" fill="#FF0000"/><polygon points="28,14 28,34 46,24" fill="#fff"/></svg>';
+              a.appendChild(thumb);
+              a.appendChild(play);
+              imagesEl.appendChild(a);
+            } else {
+              // 일반 영상 iframe 폴백
+              const iframe = document.createElement('iframe');
+              iframe.src = src.startsWith('//') ? 'https:' + src : src;
+              iframe.className = 'proj-modal-video';
+              iframe.setAttribute('allowfullscreen', '');
+              imagesEl.appendChild(iframe);
+            }
+          });
+        }
+      };
+      const renderImages = () => {
+        (p.images || []).forEach(src => {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = p.title;
+          img.loading = 'lazy';
+          imagesEl.appendChild(img);
         });
+      };
+      if (p.imagesFirst) {
+        renderImages();
+        renderVideos();
+      } else {
+        renderVideos();
+        renderImages();
       }
-      (p.images || []).forEach(src => {
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = p.title;
-        img.loading = 'lazy';
-        imagesEl.appendChild(img);
-      });
     }
 
     if (p.type === 'pdf' && p.pdfSrc) {
@@ -3999,6 +4327,51 @@ const PROJECTS = {
       iframe.src = p.pdfSrc;
       iframe.style.cssText = 'width:100%;height:80vh;border:none;display:block;';
       imagesEl.appendChild(iframe);
+    }
+
+    // App demo static section (image + Chrome link)
+    if (p.demoLink) {
+      const wrap = document.createElement('div');
+      wrap.className = 'proj-app-demo-wrap';
+
+      const label = document.createElement('p');
+      label.className = 'proj-app-demo-label';
+      label.textContent = '// Interactive Demo';
+
+      if (p.demoImg) {
+        const img = document.createElement('img');
+        img.src = p.demoImg;
+        img.className = 'proj-app-demo-img';
+        img.alt = 'App mockup';
+        wrap.appendChild(label);
+        wrap.appendChild(img);
+      } else {
+        wrap.appendChild(label);
+      }
+
+      const btnWrap = document.createElement('div');
+      btnWrap.className = 'proj-app-demo-btn-wrap';
+
+      const btn = document.createElement('a');
+      btn.className = 'proj-app-demo-btn';
+      btn.textContent = '▶  LAUNCH APP';
+      btn.href = '#';
+      btn.onclick = function(e) {
+        e.preventDefault();
+        // Chrome URL scheme 시도 → 200ms 후 일반 URL 폴백
+        const chromeUrl = 'googlechrome://' + p.demoLink.replace(/^https?:\/\//, '');
+        window.location.href = chromeUrl;
+        setTimeout(() => { window.open(p.demoLink, '_blank'); }, 300);
+      };
+
+      const hint = document.createElement('p');
+      hint.className = 'proj-app-demo-hint';
+      hint.textContent = p.demoText || '';
+
+      btnWrap.appendChild(btn);
+      btnWrap.appendChild(hint);
+      wrap.appendChild(btnWrap);
+      imagesEl.appendChild(wrap);
     }
 
     modal.classList.add('open');
@@ -4285,7 +4658,7 @@ const PROJECTS = {
       body: `
         <div class="about-modal-section">
           <img src="photo.jpg" class="about-modal-photo" onerror="this.style.display='none'" alt="이영주">
-          <p class="about-modal-p">브랜드의 언어를 사람의 경험으로. 작은 경험을 하나의 픽셀처럼 쌓아, 브랜드와 사람을 연결하는 디자이너 이영주입니다.</p>
+          <p class="about-modal-p">작은 경험을 하나의 픽셀처럼 쌓아, 브랜드와 사람을 연결하는 디자이너 이영주입니다.</p>
         </div>
         <div class="about-modal-section">
           <span class="about-modal-heading">// 지원 동기</span>
