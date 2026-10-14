@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REPALE 리페일 – Wireframe</title>
+<!-- 웹폰트 (CDN 실패 시 아래 --font-* 변수의 fallback 사용) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+/* =========================================================
+   0. DESIGN TOKENS  – 색상·서체는 여기 한 곳에서만 수정
+   ========================================================= */
+:root {
+  --bg:        #FFFDF8; /* 전체 배경 (크림) */
+  --surface:   #FFF6F2; /* 카드/섹션 배경 */
+  --pink-100:  #FFE8EC;
+  --pink-300:  #FFC8D4;
+  --peach-200: #FFDCC8;
+  --yellow-100:#FFF6C9;
+  --yellow-300:#FFE88F;
+  --line:      #F1DDD6; /* 구분선·와이어프레임 테두리 */
+  --text:      #5B4B4B; /* 본문 (진한 웜 브라운) */
+  --text-sub:  #9A8A8A;
+  --accent:    #E8A0AE; /* 포인트 (핑크 계열 중 진한 톤) */
+  --font-main: "Pretendard", "Noto Sans KR", system-ui, sans-serif;
+  --font-title:"Pretendard", "Noto Serif KR", serif; /* 나중에 서체 교체용 */
+
+  --radius-sm: 12px;
+  --radius:    16px;
+  --radius-lg: 24px;
+  --shadow:    0 6px 24px rgba(232, 160, 174, .14);
+  --container: 1200px;
+  --gutter:    24px;
+  --header-h:  72px;
+}
+
+/* =========================================================
+   1. BASE
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: var(--font-main); font-size: 15px; line-height: 1.6;
+  overflow-x: hidden; word-break: keep-all;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+ul, ol { list-style: none; margin: 0; padding: 0; }
+h1, h2, h3, h4, p { margin: 0; }
+.container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 var(--gutter); }
+.section { padding: 88px 0; }
+.section--surface { background: var(--surface); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* 섹션 제목 공통 */
+.section-head { text-align: center; margin-bottom: 40px; }
+.section-head__eyebrow { font-size: 12px; letter-spacing: .24em; color: var(--accent); font-weight: 600; }
+.section-head__title { font-family: var(--font-title); font-size: 30px; font-weight: 700; margin-top: 8px; letter-spacing: .02em; }
+.section-head__sub { color: var(--text-sub); margin-top: 8px; }
+
+/* 버튼 공통 */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 46px; padding: 0 26px; border-radius: 999px;
+  border: 1px solid var(--pink-300); background: #fff; font-weight: 600; font-size: 14px;
+  transition: background .2s, border-color .2s;
+}
+.btn:hover { background: var(--pink-100); }
+.btn--fill { background: var(--pink-300); border-color: var(--pink-300); }
+.btn--fill:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* =========================================================
+   2. WIREFRAME PLACEHOLDERS
+   ========================================================= */
+/* 이미지 자리 : 파스텔 박스 + 점선 + 대각선 X + 라벨 (비율은 style="aspect-ratio")*/
+.ph-img {
+  position: relative; width: 100%; overflow: hidden;
+  background: var(--pink-100);
+  border: 1.5px dashed var(--pink-300); border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  background-image:
+    linear-gradient(to top right, transparent calc(50% - .75px), var(--pink-300) calc(50% - .75px), var(--pink-300) calc(50% + .75px), transparent calc(50% + .75px)),
+    linear-gradient(to bottom right, transparent calc(50% - .75px), var(--pink-300) calc(50% - .75px), var(--pink-300) calc(50% + .75px), transparent calc(50% + .75px));
+}
+.ph-img--peach  { background-color: var(--peach-200); }
+.ph-img--yellow { background-color: var(--yellow-100); }
+.ph-img--round  { border-radius: 50%; }
+.ph-img::after {
+  content: attr(data-label);
+  position: relative; z-index: 1; max-width: 90%;
+  padding: 4px 10px; border-radius: 999px;
+  background: rgba(255, 253, 248, .92); border: 1px solid var(--line);
+  font-size: 11px; color: var(--text-sub); text-align: center; line-height: 1.4;
+}
+/* 텍스트 자리 표시 (라벨 모드에서 살짝 강조) */
+body.mode-label [data-slot] { outline: 1px dotted transparent; }
+body.mode-label .slot-hint [data-slot]:hover { outline-color: var(--pink-300); }
+
+/* =========================================================
+   3. TOP BANNER
+   ========================================================= */
+.top-banner { background: var(--pink-100); text-align: center; font-size: 13px; padding: 9px 40px; position: relative; }
+.top-banner__close { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; font-size: 16px; color: var(--text-sub); }
+
+/* =========================================================
+   4. HEADER / GNB / MEGA MENU
+   ========================================================= */
+.header { position: sticky; top: 0; z-index: 50; background: rgba(255, 253, 248, .95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.header__inner { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.header__logo { font-family: var(--font-title); font-size: 24px; font-weight: 800; letter-spacing: .18em; }
+.header__logo small { display: block; font-size: 10px; letter-spacing: .2em; color: var(--text-sub); font-weight: 500; margin-top: -4px; }
+.gnb { display: flex; gap: 36px; height: 100%; }
+.gnb__item { height: 100%; display: flex; align-items: center; }
+.gnb__link { font-size: 14px; font-weight: 600; letter-spacing: .06em; padding: 6px 0; position: relative; }
+.gnb__link::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--pink-300); transform: scaleX(0); transition: transform .2s; }
+.gnb__item:hover .gnb__link::after, .gnb__link:focus-visible::after { transform: scaleX(1); }
+.header__util { display: flex; gap: 6px; }
+.icon-btn { width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; position: relative; }
+.icon-btn:hover { background: var(--pink-100); }
+.icon-btn svg { width: 21px; height: 21px; stroke: var(--text); fill: none; stroke-width: 1.6; }
+.icon-btn__badge { position: absolute; top: 3px; right: 2px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.header__burger { display: none; }
+
+.mega {
+  position: absolute; left: 0; right: 0; top: 100%;
+  background: var(--bg); border-bottom: 1px solid var(--line); box-shadow: var(--shadow);
+  opacity: 0; visibility: hidden; transform: translateY(-6px); transition: .2s;
+}
+.gnb__item--mega:hover .mega, .gnb__item--mega:focus-within .mega { opacity: 1; visibility: visible; transform: none; }
+.mega__inner { display: grid; grid-template-columns: repeat(3, 1fr) 1.2fr; gap: 32px; padding: 32px var(--gutter) 40px; }
+.mega__title { font-size: 12px; letter-spacing: .14em; color: var(--accent); font-weight: 700; margin-bottom: 14px; }
+.mega__list li + li { margin-top: 10px; }
+.mega__list a { font-size: 14px; }
+.mega__list a:hover { color: var(--accent); }
+.chip { display: inline-block; padding: 5px 14px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: 13px; margin: 0 6px 8px 0; }
+.chip:hover { background: var(--pink-100); }
+
+/* 모바일 드로어 */
+.drawer { position: fixed; inset: 0; z-index: 100; visibility: hidden; }
+.drawer.is-open { visibility: visible; }
+.drawer__dim { position: absolute; inset: 0; background: rgba(91, 75, 75, .25); opacity: 0; transition: opacity .25s; }
+.drawer.is-open .drawer__dim { opacity: 1; }
+.drawer__panel { position: absolute; top: 0; bottom: 0; left: 0; width: min(84vw, 340px); background: var(--bg); padding: 20px; overflow-y: auto; transform: translateX(-100%); transition: transform .25s; }
+.drawer.is-open .drawer__panel { transform: none; }
+.drawer__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.drawer__acc-btn, .drawer__link { width: 100%; display: flex; justify-content: space-between; padding: 14px 4px; border-bottom: 1px solid var(--line); font-weight: 600; text-align: left; }
+.drawer__acc-body { display: none; padding: 10px 4px 14px; }
+.drawer__acc.is-open .drawer__acc-body { display: block; }
+.drawer__acc.is-open .drawer__acc-btn span:last-child { transform: rotate(45deg); }
+.drawer__acc-btn span:last-child { transition: transform .2s; }
+
+/* =========================================================
+   5. HERO SLIDER
+   ========================================================= */
+.hero { position: relative; overflow: hidden; }
+.hero__track { display: flex; transition: transform .7s ease; }
+.hero__slide { flex: 0 0 100%; position: relative; }
+.hero__slide .ph-img { border-radius: 0; border-left: 0; border-right: 0; aspect-ratio: 16 / 7; min-height: 360px; }
+.hero__slide:nth-child(2n) .ph-img { background-color: var(--peach-200); }
+.hero__slide:nth-child(3n) .ph-img { background-color: var(--yellow-100); }
+.hero__copy { position: absolute; inset: 0; display: flex; align-items: center; pointer-events: none; }
+.hero__copy .container { pointer-events: auto; }
+.hero__box { max-width: 460px; background: rgba(255, 253, 248, .86); border-radius: var(--radius-lg); padding: 32px; }
+.hero__eyebrow { font-size: 12px; letter-spacing: .2em; color: var(--accent); font-weight: 700; }
+.hero__title { font-family: var(--font-title); font-size: 36px; line-height: 1.3; font-weight: 700; margin: 10px 0 12px; }
+.hero__sub { color: var(--text-sub); margin-bottom: 22px; }
+.hero__arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; background: rgba(255, 253, 248, .9); border: 1px solid var(--line); font-size: 20px; z-index: 2; }
+.hero__arrow--prev { left: 20px; } .hero__arrow--next { right: 20px; }
+.hero__dots { position: absolute; bottom: 22px; left: 0; right: 0; display: flex; justify-content: center; gap: 8px; z-index: 2; }
+.hero__dot { width: 8px; height: 8px; border-radius: 999px; background: rgba(255, 255, 255, .9); border: 1px solid var(--pink-300); transition: width .3s, background .3s; padding: 0; }
+.hero__dot.is-active { width: 26px; background: var(--accent); border-color: var(--accent); }
+
+/* =========================================================
+   6. CATEGORY SHORTCUT
+   ========================================================= */
+.category { padding: 56px 0; border-bottom: 1px solid var(--line); }
+.category__list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; max-width: 760px; margin: 0 auto; }
+.category__item { display: flex; flex-direction: column; align-items: center; gap: 12px; font-weight: 600; font-size: 14px; }
+.category__item .ph-img { width: 100%; max-width: 110px; aspect-ratio: 1; transition: transform .2s; }
+.category__item:hover .ph-img { transform: translateY(-4px); }
+
+/* =========================================================
+   7. TABS + PRODUCT CARD
+   ========================================================= */
+.tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 36px; }
+.tabs__btn { height: 38px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: #fff; font-size: 14px; }
+.tabs__btn.is-active { background: var(--pink-300); border-color: var(--pink-300); font-weight: 700; }
+
+.product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px 20px; }
+.product-card { position: relative; display: flex; flex-direction: column; }
+.product-card__thumb { position: relative; }
+.product-card__badges { position: absolute; top: 12px; left: 12px; display: flex; gap: 4px; z-index: 2; }
+.badge { font-size: 10px; font-weight: 800; letter-spacing: .08em; padding: 3px 8px; border-radius: 6px; background: #fff; border: 1px solid var(--line); }
+.badge--best { background: var(--pink-300); border-color: var(--pink-300); }
+.badge--new  { background: var(--yellow-300); border-color: var(--yellow-300); }
+.product-card__wish { position: absolute; top: 8px; right: 8px; z-index: 2; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, .9); display: flex; align-items: center; justify-content: center; }
+.product-card__wish svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.8; }
+.product-card__wish.is-on svg { fill: var(--accent); }
+.product-card__body { padding: 14px 2px 0; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.product-card__tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.tag-gentle { font-size: 11px; padding: 1px 8px; border-radius: 999px; background: var(--yellow-100); color: var(--text); border: 1px solid var(--yellow-300); }
+.product-card__title { font-family: var(--font-title); font-size: 16px; font-weight: 700; }
+.product-card__desc { font-size: 13px; color: var(--text-sub); }
+.product-card__price { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.product-card__rate { color: var(--accent); font-weight: 800; }
+.product-card__sale { font-weight: 800; font-size: 16px; }
+.product-card__origin { font-size: 13px; color: var(--text-sub); text-decoration: line-through; }
+.product-card__review { font-size: 12px; color: var(--text-sub); }
+.product-card__review b { color: var(--accent); }
+.product-card__cart { margin-top: 10px; height: 40px; border-radius: var(--radius-sm); border: 1px solid var(--pink-300); font-size: 13px; font-weight: 700; background: #fff; transition: background .2s; }
+.product-card__cart:hover { background: var(--pink-100); }
+.empty { grid-column: 1 / -1; text-align: center; padding: 40px 0; color: var(--text-sub); }
+
+/* =========================================================
+   8. BRAND STORY
+   ========================================================= */
+.brand-story__inner { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center; }
+.brand-story--reverse .brand-story__media { order: 2; }
+.brand-story__eyebrow { font-size: 12px; letter-spacing: .24em; color: var(--accent); font-weight: 700; }
+.brand-story__title { font-family: var(--font-title); font-size: 32px; line-height: 1.35; font-weight: 700; margin: 12px 0 20px; }
+.brand-story__body { color: var(--text-sub); margin-bottom: 18px; }
+.brand-story__promise { display: inline-block; font-family: var(--font-title); font-weight: 700; padding: 8px 18px; border-radius: 999px; background: var(--yellow-100); margin-bottom: 28px; }
+
+/* =========================================================
+   9. INGREDIENT (PEACH-TX)
+   ========================================================= */
+.ingredient { background: linear-gradient(180deg, var(--pink-100) 0%, var(--bg) 100%); }
+.ingredient__inner { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; align-items: center; }
+.ingredient__short { display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: .2em; padding: 4px 12px; border-radius: 999px; background: #fff; border: 1px solid var(--pink-300); color: var(--accent); }
+.ingredient__name { font-size: 13px; color: var(--text-sub); margin-top: 12px; }
+.ingredient__slogan { font-family: var(--font-title); font-size: 32px; line-height: 1.35; font-weight: 700; margin: 8px 0 10px; }
+.ingredient__subcopy { color: var(--text-sub); }
+.ingredient__story { margin: 28px 0; padding: 22px 24px; border-radius: var(--radius); background: rgba(255, 255, 255, .7); border: 1px solid var(--line); }
+.ingredient__story-title { font-weight: 700; margin-bottom: 6px; }
+.ingredient__story-body { font-size: 14px; color: var(--text-sub); }
+.ingredient__points { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.point { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 16px; }
+.point__icon { width: 44px; height: 44px; margin-bottom: 12px; }
+.point__icon .ph-img { aspect-ratio: 1; border-radius: 50%; }
+.point__icon .ph-img::after { font-size: 9px; padding: 2px 6px; }
+.point__title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+.point__desc { font-size: 13px; color: var(--text-sub); }
+.point__stat { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: 12px; font-weight: 700; color: var(--accent); }
+.ingredient__stat-box { margin-top: 18px; padding: 18px; border: 1.5px dashed var(--pink-300); border-radius: var(--radius); text-align: center; color: var(--text-sub); font-size: 13px; background: rgba(255, 255, 255, .5); }
+.ingredient__note { margin-top: 12px; font-size: 11px; color: var(--text-sub); }
+
+/* =========================================================
+   10. GENTLE PROMISE BAND (순한 처방 약속)
+   ========================================================= */
+.gentle { background: var(--yellow-100); padding: 48px 0; }
+.gentle__inner { display: grid; grid-template-columns: 1fr 2.4fr; gap: 32px; align-items: center; }
+.gentle__eyebrow { font-size: 12px; letter-spacing: .2em; font-weight: 700; color: var(--accent); }
+.gentle__title { font-family: var(--font-title); font-size: 24px; font-weight: 700; margin-top: 6px; }
+.gentle__badges { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.gentle-badge { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; background: rgba(255, 255, 255, .7); border: 1px solid var(--yellow-300); border-radius: var(--radius); padding: 18px 10px; }
+.gentle-badge .ph-img { width: 56px; aspect-ratio: 1; }
+.gentle-badge .ph-img::after { font-size: 9px; padding: 2px 6px; }
+.gentle-badge__label { font-size: 13px; font-weight: 600; }
+
+/* =========================================================
+   11. RECOMMENDED (가로 슬라이더)
+   ========================================================= */
+.rec__wrap { position: relative; }
+.rec__track { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 60px) / 4); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding-bottom: 8px; scrollbar-width: none; }
+.rec__track::-webkit-scrollbar { display: none; }
+.rec__track > * { scroll-snap-align: start; }
+.rec__arrow { position: absolute; top: 34%; width: 44px; height: 44px; border-radius: 50%; background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); z-index: 3; font-size: 18px; }
+.rec__arrow--prev { left: -22px; } .rec__arrow--next { right: -22px; }
+
+/* =========================================================
+   12. ROUTINE TIMELINE
+   ========================================================= */
+.routine__list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; position: relative; counter-reset: step; }
+.routine__list::before { content: ""; position: absolute; left: 10%; right: 10%; top: 22px; border-top: 1.5px dashed var(--pink-300); }
+.routine__step { position: relative; text-align: center; counter-increment: step; }
+.routine__num { width: 44px; height: 44px; margin: 0 auto 16px; border-radius: 50%; background: var(--pink-300); display: flex; align-items: center; justify-content: center; font-weight: 800; position: relative; z-index: 1; border: 4px solid var(--surface); }
+.routine__num::before { content: "0" counter(step); font-size: 13px; }
+.routine__step .ph-img { aspect-ratio: 3 / 4; margin-bottom: 14px; }
+.routine__name { font-weight: 700; }
+.routine__desc { font-size: 13px; color: var(--text-sub); margin-top: 4px; }
+
+/* =========================================================
+   13. REVIEW
+   ========================================================= */
+.review__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.review-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+.review-card .ph-img { border-radius: 0; border-width: 0 0 1.5px 0; aspect-ratio: 4 / 3; }
+.review-card__body { padding: 18px 20px 22px; }
+.review-card__stars { color: var(--accent); letter-spacing: 2px; font-size: 14px; }
+.review-card__text { margin: 8px 0 12px; font-size: 14px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.review-card__meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-sub); }
+
+/* =========================================================
+   14. PROMOTION / EVENT
+   ========================================================= */
+.event__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.event-card .ph-img { aspect-ratio: 4 / 3; margin-bottom: 14px; }
+.event-card__title { font-family: var(--font-title); font-weight: 700; font-size: 17px; }
+.event-card__period { font-size: 13px; color: var(--text-sub); margin-top: 4px; }
+
+/* =========================================================
+   15. SNS FEED
+   ========================================================= */
+.sns__grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.sns__grid .ph-img { aspect-ratio: 1; border-radius: var(--radius-sm); }
+.sns__cta { text-align: center; margin-top: 28px; }
+
+/* =========================================================
+   16. FOOTER
+   ========================================================= */
+.footer { background: var(--surface); border-top: 1px solid var(--line); padding: 56px 0 28px; font-size: 13px; color: var(--text-sub); }
+.footer__top { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--line); }
+.footer__logo { font-family: var(--font-title); font-size: 22px; font-weight: 800; letter-spacing: .18em; color: var(--text); margin-bottom: 14px; }
+.footer__title { font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.footer__tel { font-family: var(--font-title); font-size: 24px; font-weight: 800; color: var(--text); }
+.footer__links { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.footer__links a:first-child { font-weight: 700; color: var(--text); }
+.footer__sns { display: flex; gap: 8px; margin-top: 16px; }
+.footer__sns .icon-btn { background: #fff; border: 1px solid var(--line); }
+.footer__bottom { padding-top: 22px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+/* =========================================================
+   17. FLOATING
+   ========================================================= */
+.floating { position: fixed; right: 20px; bottom: 24px; z-index: 40; display: flex; flex-direction: column; gap: 10px; }
+.floating__btn { width: 52px; height: 52px; border-radius: 50%; background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2; }
+.floating__btn--kakao { background: var(--yellow-300); border-color: var(--yellow-300); }
+.floating__btn--top { opacity: 0; visibility: hidden; transform: translateY(10px); transition: .25s; }
+.floating__btn--top.is-show { opacity: 1; visibility: visible; transform: none; }
+/* 라벨/가안 전환 토글 (작업용 – 최종 배포 시 삭제) */
+.dev-toggle { position: fixed; left: 20px; bottom: 24px; z-index: 40; height: 40px; padding: 0 16px; border-radius: 999px; background: var(--text); color: #fff; font-size: 12px; font-weight: 700; box-shadow: var(--shadow); }
+
+/* =========================================================
+   18. RESPONSIVE
+   ========================================================= */
+/* 태블릿 768 ~ 1199 */
+@media (max-width: 1199px) {
+  .gnb { gap: 22px; }
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
+  .rec__track { grid-auto-columns: calc((100% - 40px) / 3); }
+  .rec__arrow--prev { left: -6px; } .rec__arrow--next { right: -6px; }
+  .brand-story__inner, .ingredient__inner { gap: 40px; }
+  .gentle__inner { grid-template-columns: 1fr; text-align: center; }
+  .sns__grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 991px) {
+  .gnb, .header__util .icon-btn--login { display: none; }
+  .header__burger { display: inline-flex; }
+  .ingredient__inner, .brand-story__inner { grid-template-columns: 1fr; }
+  .brand-story--reverse .brand-story__media { order: 0; }
+  .ingredient__media { max-width: 420px; margin: 0 auto; width: 100%; }
+  .routine__list { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+  .footer__top { grid-template-columns: 1fr 1fr; }
+  .footer__top > :first-child { grid-column: 1 / -1; }
+}
+/* 모바일 ~767 */
+@media (max-width: 767px) {
+  :root { --gutter: 16px; --header-h: 60px; }
+  .section { padding: 60px 0; }
+  .section-head__title { font-size: 24px; }
+  .header__logo { font-size: 20px; }
+  .header__util .icon-btn--search { display: none; }
+  .hero__slide .ph-img { aspect-ratio: 4 / 5; min-height: 0; }
+  .hero__copy { align-items: flex-end; padding-bottom: 56px; }
+  .hero__box { padding: 20px; }
+  .hero__title { font-size: 24px; }
+  .hero__arrow { display: none; }
+  .category__list { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  .category__item { font-size: 12px; }
+  .tabs { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; margin-left: calc(var(--gutter) * -1); margin-right: calc(var(--gutter) * -1); padding: 0 var(--gutter); }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs__btn { flex: 0 0 auto; }
+  .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; }
+  .product-card__title { font-size: 14px; }
+  .rec__track { grid-auto-columns: 70%; gap: 12px; }
+  .rec__arrow { display: none; }
+  .brand-story__title, .ingredient__slogan { font-size: 24px; }
+  .ingredient__points { grid-template-columns: 1fr; }
+  .gentle__badges { grid-template-columns: repeat(2, 1fr); }
+  .routine__list { grid-template-columns: 1fr; gap: 0; }
+  .routine__list::before { left: 22px; right: auto; top: 0; bottom: 0; border-top: 0; border-left: 1.5px dashed var(--pink-300); }
+  .routine__step { display: grid; grid-template-columns: 44px 88px 1fr; gap: 14px; align-items: center; text-align: left; padding: 10px 0; }
+  .routine__num { margin: 0; }
+  .routine__step .ph-img { margin: 0; aspect-ratio: 1; }
+  .review__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .review-card__body { padding: 12px 14px 16px; }
+  .event__grid { grid-template-columns: 1fr; }
+  .sns__grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .footer__top { grid-template-columns: 1fr; }
+  .floating { right: 14px; bottom: 16px; }
+  .floating__btn { width: 46px; height: 46px; }
+  .dev-toggle { left: 14px; bottom: 16px; }
+}
+</style>
+</head>
+
+<body class="mode-label">
+
+<!-- [SECTION] 1. 상단 띠배너 : 프로모션/신규회원 혜택 한 줄 + 닫기 버튼 -->
+<div class="top-banner" id="topBanner">
+  <p data-slot="top-banner-text" data-draft="신규회원 첫 구매 시 [혜택 내용] · 지금 가입하기">[띠배너 문구]</p>
+  <button class="top-banner__close" type="button" aria-label="띠배너 닫기" id="topBannerClose">✕</button>
+</div>
+
+<!-- [SECTION] 2. 헤더(GNB) : 로고 + 메인메뉴(SHOP 메가메뉴) + 유틸 아이콘 / sticky / 모바일 햄버거 -->
+<header class="header" id="header">
+  <div class="container header__inner">
+    <button class="icon-btn header__burger" type="button" aria-label="메뉴 열기" id="burgerBtn">
+      <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+
+    <a href="#" class="header__logo" data-slot="header-logo">REPALE<small>리페일</small></a>
+
+    <nav aria-label="메인 메뉴">
+      <ul class="gnb">
+        <li class="gnb__item gnb__item--mega">
+          <a href="#best" class="gnb__link">SHOP</a>
+          <!-- 메가메뉴 : 카테고리별 / 피부고민별 / 라인별 + 배너 자리 -->
+          <div class="mega">
+            <div class="container mega__inner">
+              <div>
+                <p class="mega__title">CATEGORY</p>
+                <ul class="mega__list">
+                  <li><a href="#best" data-cat="skin">스킨</a></li>
+                  <li><a href="#best" data-cat="toner">토너</a></li>
+                  <li><a href="#best" data-cat="serum">세럼</a></li>
+                  <li><a href="#best" data-cat="mask">마스크팩</a></li>
+                  <li><a href="#best" data-cat="foam">폼클렌징</a></li>
+                </ul>
+              </div>
+              <div>
+                <p class="mega__title">피부고민별</p>
+                <a href="#" class="chip">수분</a><a href="#" class="chip">진정</a><a href="#" class="chip">미백·잡티</a><a href="#" class="chip">탄력</a>
+              </div>
+              <div>
+                <p class="mega__title">LINE</p>
+                <ul class="mega__list">
+                  <li><a href="#ingredient" data-bind="ingredient.shortName">PEACH-TX</a> 라인</li>
+                  <li><a href="#" data-slot="mega-line-2">[라인명 2]</a></li>
+                  <li><a href="#" data-slot="mega-line-3">[라인명 3]</a></li>
+                </ul>
+              </div>
+              <div class="ph-img ph-img--peach" style="aspect-ratio:16/9" role="img" aria-label="메가메뉴 배너 이미지 자리" data-label="IMG | 메가메뉴 배너 | 16:9"></div>
+            </div>
+          </div>
+        </li>
+        <li class="gnb__item"><a href="#best" class="gnb__link">BEST</a></li>
+        <li class="gnb__item"><a href="#recommended" class="gnb__link">NEW</a></li>
+        <li class="gnb__item"><a href="#ingredient" class="gnb__link">성분 이야기</a></li>
+        <li class="gnb__item"><a href="#brand" class="gnb__link">BRAND</a></li>
+        <li class="gnb__item"><a href="#event" class="gnb__link">EVENT</a></li>
+      </ul>
+    </nav>
+
+    <div class="header__util">
+      <button class="icon-btn icon-btn--search" type="button" aria-label="검색">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+      </button>
+      <button class="icon-btn icon-btn--login" type="button" aria-label="로그인">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20.5c1-4 4-6 7.5-6s6.5 2 7.5 6"/></svg>
+      </button>
+      <button class="icon-btn" type="button" aria-label="장바구니">
+        <svg viewBox="0 0 24 24"><path d="M5 8h14l-1.2 11.5H6.2z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+        <span class="icon-btn__badge" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- 모바일 드로어 메뉴 -->
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer__dim" data-close></div>
+  <div class="drawer__panel" role="dialog" aria-label="모바일 메뉴">
+    <div class="drawer__head">
+      <span class="header__logo">REPALE</span>
+      <button class="icon-btn" type="button" aria-label="메뉴 닫기" data-close>✕</button>
+    </div>
+    <div class="drawer__acc">
+      <button class="drawer__acc-btn" type="button"><span>SHOP</span><span>＋</span></button>
+      <div class="drawer__acc-body">
+        <p class="mega__title">CATEGORY</p>
+        <a href="#best" class="chip" data-cat="skin">스킨</a><a href="#best" class="chip" data-cat="toner">토너</a><a href="#best" class="chip" data-cat="serum">세럼</a><a href="#best" class="chip" data-cat="mask">마스크팩</a><a href="#best" class="chip" data-cat="foam">폼클렌징</a>
+        <p class="mega__title" style="margin-top:12px">피부고민별</p>
+        <a href="#" class="chip">수분</a><a href="#" class="chip">진정</a><a href="#" class="chip">미백·잡티</a><a href="#" class="chip">탄력</a>
+      </div>
+    </div>
+    <a href="#best" class="drawer__link">BEST</a>
+    <a href="#recommended" class="drawer__link">NEW</a>
+    <a href="#ingredient" class="drawer__link">성분 이야기</a>
+    <a href="#brand" class="drawer__link">BRAND</a>
+    <a href="#event" class="drawer__link">EVENT</a>
+    <a href="#" class="drawer__link">로그인 / 회원가입</a>
+  </div>
+</div>
+
+<main>
+
+<!-- [SECTION] 3. 히어로 슬라이더 : 풀폭 이미지 5장 자동 롤링(5초) + 헤드라인 + 서브카피 + 버튼 / 좌우 화살표 + 인디케이터 -->
+<section class="hero" aria-roledescription="carousel" aria-label="메인 배너">
+  <div class="hero__track" id="heroTrack"><!-- JS: heroSlides 배열로 생성 --></div>
+  <button class="hero__arrow hero__arrow--prev" type="button" aria-label="이전 배너" id="heroPrev">‹</button>
+  <button class="hero__arrow hero__arrow--next" type="button" aria-label="다음 배너" id="heroNext">›</button>
+  <div class="hero__dots" id="heroDots"></div>
+</section>
+
+<!-- [SECTION] 4. 카테고리 바로가기 : 원형 아이콘 5개 + 라벨 (클릭 시 BEST 탭 전환) -->
+<section class="category" aria-label="카테고리 바로가기">
+  <div class="container">
+    <ul class="category__list">
+      <li><a href="#best" class="category__item" data-cat="skin"><span class="ph-img ph-img--round" role="img" aria-label="스킨 아이콘 자리" data-label="IMG | 스킨 | 1:1"></span><span data-slot="category-1">스킨</span></a></li>
+      <li><a href="#best" class="category__item" data-cat="toner"><span class="ph-img ph-img--round ph-img--peach" role="img" aria-label="토너 아이콘 자리" data-label="IMG | 토너 | 1:1"></span><span data-slot="category-2">토너</span></a></li>
+      <li><a href="#best" class="category__item" data-cat="serum"><span class="ph-img ph-img--round ph-img--yellow" role="img" aria-label="세럼 아이콘 자리" data-label="IMG | 세럼 | 1:1"></span><span data-slot="category-3">세럼</span></a></li>
+      <li><a href="#best" class="category__item" data-cat="mask"><span class="ph-img ph-img--round" role="img" aria-label="마스크팩 아이콘 자리" data-label="IMG | 마스크팩 | 1:1"></span><span data-slot="category-4">마스크팩</span></a></li>
+      <li><a href="#best" class="category__item" data-cat="foam"><span class="ph-img ph-img--round ph-img--peach" role="img" aria-label="폼클렌징 아이콘 자리" data-label="IMG | 폼클렌징 | 1:1"></span><span data-slot="category-5">폼클렌징</span></a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- [SECTION] 5. BEST PRODUCTS : 카테고리 탭 + 상품 카드 4열 그리드(모바일 2열) / products 배열에서 자동 생성 -->
+<section class="section" id="best">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-head__eyebrow">BEST PRODUCTS</p>
+      <h2 class="section-head__title" data-slot="best-title" data-draft="가장 사랑받는 리페일">[섹션 타이틀]</h2>
+      <p class="section-head__sub" data-slot="best-sub" data-draft="매일의 맑음을 채워 줄 베스트 아이템">[섹션 서브카피 1줄]</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="베스트 카테고리" id="bestTabs">
+      <button class="tabs__btn is-active" type="button" role="tab" aria-selected="true" data-filter="all">전체</button>
+      <button class="tabs__btn" type="button" role="tab" aria-selected="false" data-filter="skin">스킨</button>
+      <button class="tabs__btn" type="button" role="tab" aria-selected="false" data-filter="toner">토너</button>
+      <button class="tabs__btn" type="button" role="tab" aria-selected="false" data-filter="serum">세럼</button>
+      <button class="tabs__btn" type="button" role="tab" aria-selected="false" data-filter="mask">마스크팩</button>
+      <button class="tabs__btn" type="button" role="tab" aria-selected="false" data-filter="foam">폼클렌징</button>
+    </div>
+    <div class="product-grid" id="bestGrid" role="tabpanel"></div>
+  </div>
+</section>
+
+<!-- [SECTION] 6. 브랜드 스토리 배너 : 좌 이미지 + 우 텍스트(슬로건/의미 설명/약속 카피/버튼) – .brand-story--reverse 추가 시 좌우 반전 -->
+<section class="section section--surface brand-story" id="brand">
+  <div class="container brand-story__inner">
+    <div class="brand-story__media">
+      <div class="ph-img ph-img--peach" style="aspect-ratio:5/4" role="img" aria-label="브랜드 스토리 이미지 자리" data-label="IMG | 브랜드 스토리 | 5:4"></div>
+    </div>
+    <div class="brand-story__text">
+      <p class="brand-story__eyebrow">BRAND STORY · RETURN TO PALE</p>
+      <h2 class="brand-story__title" data-slot="brand-slogan" data-draft="본연의 아름다운 피부로, 다시 돌아가다">[브랜드 슬로건]</h2>
+      <p class="brand-story__body" data-slot="brand-story-body" data-draft="REPALE은 'Return to Pale'에서 출발한 이름이에요. 더하기보다 되돌리는 일, 피부 본연의 맑고 환한 상태로 돌아가는 길을 함께합니다.">[REPALE 의미 설명 3~4줄]<br>[REPALE 의미 설명]<br>[REPALE 의미 설명]</p>
+      <p class="brand-story__promise" data-slot="brand-promise" data-draft="자극은 덜고, 본연은 더하다.">[브랜드 약속 한 줄]</p>
+      <div><a href="#" class="btn" data-slot="brand-story-btn">브랜드 스토리 보기 →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- [SECTION] 7. 메인 성분 소개 (PEACH-TX) : 성분 비주얼 4:5 + 헤드라인/서브카피 + 스토리 + 포인트 3개 + 수치 자리 + 주의 문구 / INGREDIENT 객체에서 바인딩 -->
+<section class="section ingredient" id="ingredient">
+  <div class="container ingredient__inner">
+    <div class="ingredient__media">
+      <div class="ph-img" style="aspect-ratio:4/5" role="img" aria-label="성분 비주얼 이미지 자리 (복숭아꽃 + 세틸트라넥사메이트)" data-label="IMG | 성분 비주얼 | 4:5"></div>
+    </div>
+    <div class="ingredient__text">
+      <span class="ingredient__short" data-slot="ingredient-shortname" data-bind="ingredient.shortName"></span>
+      <p class="ingredient__name" data-slot="ingredient-name" data-bind="ingredient.name"></p>
+      <h2 class="ingredient__slogan" data-slot="ingredient-slogan" data-bind="ingredient.slogan"></h2>
+      <p class="ingredient__subcopy" data-slot="ingredient-subcopy" data-bind="ingredient.subcopy"></p>
+
+      <div class="ingredient__story">
+        <p class="ingredient__story-title" data-slot="ingredient-story-title" data-bind="ingredient.storyTitle"></p>
+        <p class="ingredient__story-body" data-slot="ingredient-story-body" data-bind="ingredient.storyBody"></p>
+      </div>
+
+      <div class="ingredient__points" id="ingredientPoints"><!-- JS: INGREDIENT.points 로 생성 --></div>
+
+      <div class="ingredient__stat-box" data-slot="ingredient-stat">[수치/인체적용시험 결과 자리 – 실제 시험 결과가 있을 때만 기재]</div>
+      <p class="ingredient__note" data-slot="ingredient-note" data-bind="ingredient.note"></p>
+    </div>
+  </div>
+</section>
+
+<!-- [SECTION] 8. 순한 처방 약속 띠 : 저자극 브랜드 약속 한 줄 + 배지 4개(아이콘 자리 + 라벨, 내용은 시험·처방 확인 후 기재) -->
+<section class="gentle" aria-label="순한 처방 약속">
+  <div class="container gentle__inner">
+    <div>
+      <p class="gentle__eyebrow">GENTLE PROMISE</p>
+      <p class="gentle__title" data-slot="gentle-title" data-draft="순하게, 본연으로.">[순한 처방 약속 한 줄]</p>
+    </div>
+    <ul class="gentle__badges">
+      <li class="gentle-badge"><span class="ph-img ph-img--round ph-img--yellow" role="img" aria-label="배지 아이콘 자리 1" data-label="ICON 1:1"></span><span class="gentle-badge__label" data-slot="gentle-badge-1">[저자극 테스트 자리]</span></li>
+      <li class="gentle-badge"><span class="ph-img ph-img--round ph-img--yellow" role="img" aria-label="배지 아이콘 자리 2" data-label="ICON 1:1"></span><span class="gentle-badge__label" data-slot="gentle-badge-2">[무향/무색소 여부 자리]</span></li>
+      <li class="gentle-badge"><span class="ph-img ph-img--round ph-img--yellow" role="img" aria-label="배지 아이콘 자리 3" data-label="ICON 1:1"></span><span class="gentle-badge__label" data-slot="gentle-badge-3">[성분 최소화 자리]</span></li>
+      <li class="gentle-badge"><span class="ph-img ph-img--round ph-img--yellow" role="img" aria-label="배지 아이콘 자리 4" data-label="ICON 1:1"></span><span class="gentle-badge__label" data-slot="gentle-badge-4">[약산성 pH 자리]</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- [SECTION] 9. RECOMMENDED : 해시태그 탭 + 상품 가로 슬라이드(스와이프/화살표) -->
+<section class="section" id="recommended">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-head__eyebrow">RECOMMENDED</p>
+      <h2 class="section-head__title" data-slot="rec-title" data-draft="지금, 리페일이 추천해요">[섹션 타이틀]</h2>
+    </div>
+    <div class="tabs" role="tablist" aria-label="추천 해시태그" id="recTabs">
+      <button class="tabs__btn is-active" type="button" role="tab" aria-selected="true" data-filter="promo">#프로모션특가</button>
+      <button class="tabs__btn" type="button" role="tab" aria-selected="false" data-filter="new">#신상소개</button>
+      <button class="tabs__btn" type="button" role="tab" aria-selected="false" data-filter="md">#MD추천</button>
+      <button class="tabs__btn" type="button" role="tab" aria-selected="false" data-filter="set">#꿀조합세트</button>
+    </div>
+    <div class="rec__wrap">
+      <button class="rec__arrow rec__arrow--prev" type="button" aria-label="이전 상품" id="recPrev">‹</button>
+      <div class="rec__track" id="recTrack" role="tabpanel"></div>
+      <button class="rec__arrow rec__arrow--next" type="button" aria-label="다음 상품" id="recNext">›</button>
+    </div>
+  </div>
+</section>
+
+<!-- [SECTION] 10. 루틴 가이드 : REPALE 5단계 루틴 가로 타임라인 (폼클렌징 → 스킨 → 토너 → 세럼 → 마스크팩) -->
+<section class="section section--surface routine">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-head__eyebrow">DAILY ROUTINE</p>
+      <h2 class="section-head__title" data-slot="routine-title" data-draft="맑은 하루의 시작, 리페일 5단계 루틴">[루틴 섹션 타이틀]</h2>
+      <p class="section-head__sub" data-slot="routine-sub">[루틴 서브카피 1줄]</p>
+    </div>
+    <ol class="routine__list" id="routineList"><!-- JS: routineSteps 배열로 생성 --></ol>
+  </div>
+</section>
+
+<!-- [SECTION] 11. 리뷰 : 포토리뷰 카드 6개 (이미지 + 별점 + 리뷰 문구 + 작성자) -->
+<section class="section review">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-head__eyebrow">REAL REVIEW</p>
+      <h2 class="section-head__title" data-slot="review-title">[리뷰 섹션 타이틀]</h2>
+    </div>
+    <div class="review__grid" id="reviewGrid"></div>
+  </div>
+</section>
+
+<!-- [SECTION] 12. PROMOTION / EVENT : 이벤트 카드 3개 (이미지 + 제목 + 기간) -->
+<section class="section section--surface" id="event">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-head__eyebrow">PROMOTION · EVENT</p>
+      <h2 class="section-head__title" data-slot="event-title">[이벤트 섹션 타이틀]</h2>
+    </div>
+    <div class="event__grid">
+      <a href="#" class="event-card"><div class="ph-img" role="img" aria-label="이벤트 이미지 자리 1" data-label="IMG | 이벤트 배너 | 4:3"></div><p class="event-card__title" data-slot="event-1-title" data-draft="신규회원 첫 구매 혜택">[이벤트 제목]</p><p class="event-card__period" data-slot="event-1-period">[YYYY.MM.DD – YYYY.MM.DD]</p></a>
+      <a href="#" class="event-card"><div class="ph-img ph-img--peach" role="img" aria-label="이벤트 이미지 자리 2" data-label="IMG | 이벤트 배너 | 4:3"></div><p class="event-card__title" data-slot="event-2-title">[이벤트 제목]</p><p class="event-card__period" data-slot="event-2-period">[YYYY.MM.DD – YYYY.MM.DD]</p></a>
+      <a href="#" class="event-card"><div class="ph-img ph-img--yellow" role="img" aria-label="이벤트 이미지 자리 3" data-label="IMG | 이벤트 배너 | 4:3"></div><p class="event-card__title" data-slot="event-3-title">[이벤트 제목]</p><p class="event-card__period" data-slot="event-3-period">[YYYY.MM.DD – YYYY.MM.DD]</p></a>
+    </div>
+  </div>
+</section>
+
+<!-- [SECTION] 13. SNS 피드 : 정사각 이미지 6개 + 인스타그램 연결 버튼 -->
+<section class="section sns">
+  <div class="container">
+    <div class="section-head">
+      <p class="section-head__eyebrow">@REPALE_OFFICIAL</p>
+      <h2 class="section-head__title" data-slot="sns-title">[SNS 섹션 타이틀]</h2>
+    </div>
+    <div class="sns__grid" id="snsGrid"></div>
+    <div class="sns__cta"><a href="#" class="btn" data-slot="sns-btn">[인스타그램 바로가기]</a></div>
+  </div>
+</section>
+
+</main>
+
+<!-- [SECTION] 14. 푸터 : 로고 + 회사정보 + 고객센터 + 정책 링크 + SNS 아이콘 + 카피라이트 -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div>
+        <p class="footer__logo">REPALE</p>
+        <p data-slot="footer-company">[상호] · 대표 [대표자명]<br>[주소]<br>사업자등록번호 [000-00-00000] · 통신판매업신고 [제0000-지역-0000호]</p>
+        <div class="footer__sns">
+          <a href="#" class="icon-btn" aria-label="인스타그램"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.8" cy="7.2" r=".6"/></svg></a>
+          <a href="#" class="icon-btn" aria-label="유튜브"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="4"/><path d="M10.5 9.5l4 2.5-4 2.5z"/></svg></a>
+          <a href="#" class="icon-btn" aria-label="블로그"><svg viewBox="0 0 24 24"><path d="M5 5h14v10H10l-4 4v-4H5z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <p class="footer__title">고객센터</p>
+        <p class="footer__tel" data-slot="footer-tel">[0000-0000]</p>
+        <p data-slot="footer-hours">[운영시간 평일 00:00 – 00:00]<br>[점심시간 / 주말·공휴일 휴무]</p>
+      </div>
+      <div>
+        <p class="footer__title">INFORMATION</p>
+        <div class="footer__links">
+          <a href="#">개인정보처리방침</a><a href="#">이용약관</a><a href="#">FAQ</a><a href="#">1:1 문의</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p data-slot="footer-copyright">© REPALE. All rights reserved.</p>
+      <p data-slot="footer-notice">[기타 법적 고지 자리]</p>
+    </div>
+  </div>
+</footer>
+
+<!-- [SECTION] 15. 우측 하단 플로팅 : 카카오톡 문의 + TOP 버튼 -->
+<div class="floating">
+  <a href="#" class="floating__btn floating__btn--kakao" aria-label="카카오톡 문의" data-slot="floating-kakao">TALK</a>
+  <button class="floating__btn floating__btn--top" type="button" aria-label="맨 위로" id="topBtn">TOP</button>
+</div>
+
+<!-- 작업용 토글 : 라벨 ↔ 문구 가안 미리보기 (최종 배포 시 삭제) -->
+<button class="dev-toggle" type="button" id="devToggle">가안 문구 보기</button>
+
+<script>
+/* =========================================================
+   A. DATA – 실제 데이터는 여기만 수정하면 전체에 반영
+   ========================================================= */
+
+/* {{MAIN_INGREDIENT}} : 메인 성분 – 이 객체만 바꾸면 사이트 전체 성분 문구가 바뀜 */
+const INGREDIENT = {
+  name:        "세틸트라넥사메이트 + 복숭아꽃 추출물",
+  shortName:   "PEACH-TX",              // 시그니처 성분명 가안
+  slogan:      "복숭아꽃이 피어나듯, 맑은 본연의 피부로.",
+  subcopy:     "잡티와 붉은기까지 함께 살피는 REPALE 시그니처 성분 조합",
+  storyTitle:  "왜 복숭아꽃일까요?",
+  storyBody:   "[성분 스토리 3~4줄 – 아래 문구 가안 참고]",
+  points: [
+    { title: "잡티·붉은기를 함께",  desc: "[세틸트라넥사메이트 설명 1~2줄]", stat: "[시험 수치 자리]" },
+    { title: "복숭아꽃 추출물",     desc: "[도화 추출물 설명 1~2줄]",        stat: "[시험 수치 자리]" },
+    { title: "매일 쓰는 5단계 루틴", desc: "[라인 전체 사용감 설명 1~2줄]",   stat: "[시험 수치 자리]" }
+  ],
+  note: "[표시·광고 문구 주의사항 자리]"
+};
+
+/* 성분 문구 가안 – '가안 문구 보기' 토글 시 INGREDIENT 대신 표시 (확정되면 INGREDIENT에 옮겨 적기) */
+const INGREDIENT_DRAFT = {
+  subcopy:   "잡티와 붉은기까지 함께 살피는 REPALE 시그니처 조합, PEACH-TX",
+  storyBody: "예부터 복사꽃은 맑고 고운 안색을 떠올리게 하는 꽃으로 사랑받아 왔어요. REPALE은 그 이미지에서 출발해, 복숭아꽃 추출물과 세틸트라넥사메이트를 하나의 조합으로 담았습니다. 피부가 원래 가진 맑은 결로 돌아가는 일, 그것이 리페일의 이름입니다.",
+  points: [
+    { desc: "칙칙함과 붉은 기운이 신경 쓰이는 피부를 위해, 트라넥삼산 유도체 세틸트라넥사메이트를 담았어요." },
+    { desc: "은은한 복사꽃 이미지를 닮은 맑은 피부 표현을 위한 REPALE의 베이스 성분이에요." },
+    { desc: "폼클렌징부터 마스크팩까지, 같은 콘셉트로 이어지는 데일리 라인이에요." }
+  ],
+  note: "※ 개인에 따라 결과가 다를 수 있습니다. [시험 기관/조건 자리]"
+};
+
+/* 히어로 슬라이드 (5장) */
+const heroSlides = [
+  { eyebrow: "{{shortName}} LINE", title: "[H1 헤드라인]", sub: "[서브카피 1~2줄]", draftTitle: "복숭아꽃이 피어나듯, 본연의 맑음으로", draftSub: "REPALE 시그니처 {{shortName}} 라인" },
+  { eyebrow: "DAILY ROUTINE",      title: "[H1 헤드라인]", sub: "[서브카피 1~2줄]", draftTitle: "맑은 하루의 시작, 리페일 5단계 루틴" },
+  { eyebrow: "WELCOME",            title: "[H1 헤드라인]", sub: "[서브카피 1~2줄]", draftTitle: "신규회원 첫 구매 혜택" },
+  { eyebrow: "NEW",                title: "[H1 헤드라인]", sub: "[서브카피 1~2줄]" },
+  { eyebrow: "EVENT",              title: "[H1 헤드라인]", sub: "[서브카피 1~2줄]" }
+];
+
+/* 상품 데이터 – 카드는 이 배열에서 자동 생성
+   category: skin | toner | serum | mask | foam
+   badges:   "BEST" | "NEW"
+   rec:      RECOMMENDED 탭 (promo | new | md | set) */
+const products = [
+  { id: 1,  category: "foam",  name: "피치 TX 클렌징 폼",        desc: "[한 줄 설명]", rate: "[00%]", price: "[판매가]", origin: "[정가]", rating: "[0.0]", reviews: "[000]", badges: ["BEST"],        gentle: true, rec: ["promo", "md"] },
+  { id: 2,  category: "skin",  name: "피치 TX 스킨",             desc: "[한 줄 설명]", rate: "[00%]", price: "[판매가]", origin: "[정가]", rating: "[0.0]", reviews: "[000]", badges: ["BEST"],        gentle: true, rec: ["promo"] },
+  { id: 3,  category: "toner", name: "피치 TX 토너",             desc: "[한 줄 설명]", rate: "[00%]", price: "[판매가]", origin: "[정가]", rating: "[0.0]", reviews: "[000]", badges: ["BEST", "NEW"], gentle: true, rec: ["new", "md"] },
+  { id: 4,  category: "serum", name: "피치 TX 브라이트닝 세럼",  desc: "[한 줄 설명]", rate: "[00%]", price: "[판매가]", origin: "[정가]", rating: "[0.0]", reviews: "[000]", badges: ["BEST"],        gentle: true, rec: ["promo", "md"] },
+  { id: 5,  category: "mask",  name: "피치 TX 마스크팩",         desc: "[한 줄 설명]", rate: "[00%]", price: "[판매가]", origin: "[정가]", rating: "[0.0]", reviews: "[000]", badges: ["NEW"],         gentle: true, rec: ["new"] },
+  { id: 6,  category: "skin",  name: "[상품명]",                 desc: "[한 줄 설명]", rate: "[00%]", price: "[판매가]", origin: "[정가]", rating: "[0.0]", reviews: "[000]", badges: [],              gentle: true, rec: ["md"] },
+  { id: 7,  category: "toner", name: "[상품명]",                 desc: "[한 줄 설명]", rate: "[00%]", price: "[판매가]", origin: "[정가]", rating: "[0.0]", reviews: "[000]", badges: ["NEW"],         gentle: true, rec: ["new", "promo"] },
+  { id: 8,  category: "serum", name: "[상품명]",                 desc: "[한 줄 설명]", rate: "[00%]", price: "[판매가]", origin: "[정가]", rating: "[0.0]", reviews: "[000]", badges: [],              gentle: true, rec: ["md"] },
+  { id: 9,  category: "mask",  name: "[상품명]",                 desc: "[한 줄 설명]", rate: "[00%]", price: "[판매가]", origin: "[정가]", rating: "[0.0]", reviews: "[000]", badges: [],              gentle: true, rec: ["promo"] },
+  { id: 10, category: "foam",  name: "[상품명]",                 desc: "[한 줄 설명]", rate: "[00%]", price: "[판매가]", origin: "[정가]", rating: "[0.0]", reviews: "[000]", badges: ["NEW"],         gentle: true, rec: ["new"] },
+  { id: 11, category: "set",   name: "[세트 상품명 – 5단계 루틴 세트]", desc: "[한 줄 설명]", rate: "[00%]", price: "[판매가]", origin: "[정가]", rating: "[0.0]", reviews: "[000]", badges: ["BEST"], gentle: true, rec: ["set", "promo"] },
+  { id: 12, category: "set",   name: "[세트 상품명 – 토너+세럼]", desc: "[한 줄 설명]", rate: "[00%]", price: "[판매가]", origin: "[정가]", rating: "[0.0]", reviews: "[000]", badges: [],       gentle: true, rec: ["set"] },
+  { id: 13, category: "set",   name: "[세트 상품명 – 클렌징+스킨]", desc: "[한 줄 설명]", rate: "[00%]", price: "[판매가]", origin: "[정가]", rating: "[0.0]", reviews: "[000]", badges: ["NEW"], gentle: true, rec: ["set", "new"] }
+];
+
+/* 루틴 5단계 */
+const routineSteps = [
+  { name: "폼클렌징", desc: "[한 줄 설명]" },
+  { name: "스킨",     desc: "[한 줄 설명]" },
+  { name: "토너",     desc: "[한 줄 설명]" },
+  { name: "세럼",     desc: "[한 줄 설명]" },
+  { name: "마스크팩", desc: "[한 줄 설명]" }
+];
+
+/* 리뷰 6개 */
+const reviews = Array.from({ length: 6 }, (_, i) => ({ product: "[구매 상품명]", text: "[리뷰 문구 2~3줄]", author: "[작성자]", date: "[YYYY.MM.DD]", stars: 5, n: i + 1 }));
+
+/* =========================================================
+   B. HELPERS
+   ========================================================= */
+const $  = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const tones = ["", "ph-img--peach", "ph-img--yellow"];
+const fillShort = (str = "") => str.replace(/\{\{shortName\}\}/g, INGREDIENT.shortName);
+let showDraft = false;
+
+/* 이미지 자리 마크업 : IMG | 용도 | 비율 */
+function phImg(purpose, ratio, tone = "", extra = "") {
+  return `<div class="ph-img ${tone} ${extra}" style="aspect-ratio:${ratio.replace(":", "/")}" role="img" aria-label="${purpose} 이미지 자리" data-label="IMG | ${purpose} | ${ratio}"></div>`;
+}
+
+/* =========================================================
+   C. INGREDIENT BINDING – data-bind="ingredient.xxx"
+   ========================================================= */
+function bindIngredient() {
+  const src = showDraft ? { ...INGREDIENT, ...INGREDIENT_DRAFT, points: INGREDIENT.points } : INGREDIENT;
+  $$('[data-bind^="ingredient."]').forEach(el => {
+    const key = el.dataset.bind.split(".")[1];
+    if (typeof src[key] === "string") el.textContent = src[key];
+  });
+  $("#ingredientPoints").innerHTML = INGREDIENT.points.map((p, i) => {
+    const desc = showDraft && INGREDIENT_DRAFT.points[i] ? INGREDIENT_DRAFT.points[i].desc : p.desc;
+    return `
+    <div class="point">
+      <div class="point__icon">${phImg("포인트 아이콘", "1:1", tones[i])}</div>
+      <p class="point__title" data-slot="ingredient-point-${i + 1}-title">${p.title}</p>
+      <p class="point__desc" data-slot="ingredient-point-${i + 1}-desc">${desc}</p>
+      <p class="point__stat" data-slot="ingredient-point-${i + 1}-stat">${p.stat}</p>
+    </div>`;
+  }).join("");
+}
+
+/* =========================================================
+   D. PRODUCT CARD (공통 컴포넌트)
+   ========================================================= */
+function productCard(p, i = 0) {
+  const badges = p.badges.map(b => `<span class="badge badge--${b.toLowerCase()}">${b}</span>`).join("");
+  return `
+  <article class="product-card">
+    <div class="product-card__thumb">
+      <div class="product-card__badges">${badges}</div>
+      <button class="product-card__wish" type="button" aria-label="찜하기" aria-pressed="false">
+        <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+      </button>
+      ${phImg("상품 썸네일", "1:1", tones[i % 3])}
+    </div>
+    <div class="product-card__body">
+      <div class="product-card__tags">${p.gentle ? '<span class="tag-gentle" data-slot="product-' + p.id + '-tag">저자극</span>' : ""}</div>
+      <h3 class="product-card__title" data-slot="product-${p.id}-name">${p.name}</h3>
+      <p class="product-card__desc" data-slot="product-${p.id}-desc">${p.desc}</p>
+      <div class="product-card__price">
+        <span class="product-card__rate" data-slot="product-${p.id}-rate">${p.rate}</span>
+        <span class="product-card__sale" data-slot="product-${p.id}-price">${p.price}</span>
+        <span class="product-card__origin" data-slot="product-${p.id}-origin">${p.origin}</span>
+      </div>
+      <p class="product-card__review">★ <b data-slot="product-${p.id}-rating">${p.rating}</b> · 리뷰 <span data-slot="product-${p.id}-reviews">${p.reviews}</span></p>
+      <button class="product-card__cart" type="button" data-cart>담기</button>
+    </div>
+  </article>`;
+}
+
+/* =========================================================
+   E. HERO SLIDER – 5초 자동 롤링
+   ========================================================= */
+const hero = { idx: 0, timer: null };
+function renderHero() {
+  $("#heroTrack").innerHTML = heroSlides.map((s, i) => {
+    const title = showDraft && s.draftTitle ? s.draftTitle : s.title;
+    const sub   = showDraft && s.draftSub   ? s.draftSub   : s.sub;
+    return `
+    <div class="hero__slide" role="group" aria-roledescription="slide" aria-label="${i + 1} / ${heroSlides.length}">
+      ${phImg("히어로 배너 " + (i + 1), "16:7")}
+      <div class="hero__copy"><div class="container"><div class="hero__box">
+        <p class="hero__eyebrow" data-slot="hero-${i + 1}-eyebrow">${fillShort(s.eyebrow)}</p>
+        <h2 class="hero__title" data-slot="hero-${i + 1}-title">${fillShort(title)}</h2>
+        <p class="hero__sub" data-slot="hero-${i + 1}-sub">${fillShort(sub)}</p>
+        <a href="#" class="btn btn--fill" data-slot="hero-${i + 1}-btn">자세히 보기</a>
+      </div></div></div>
+    </div>`;
+  }).join("");
+  $("#heroDots").innerHTML = heroSlides.map((_, i) => `<button class="hero__dot" type="button" aria-label="${i + 1}번 배너로 이동" data-i="${i}"></button>`).join("");
+  goHero(hero.idx);
+}
+function goHero(i) {
+  hero.idx = (i + heroSlides.length) % heroSlides.length;
+  $("#heroTrack").style.transform = `translateX(-${hero.idx * 100}%)`;
+  $$(".hero__dot").forEach((d, k) => d.classList.toggle("is-active", k === hero.idx));
+}
+function startHero() { clearInterval(hero.timer); hero.timer = setInterval(() => goHero(hero.idx + 1), 5000); }
+$("#heroPrev").addEventListener("click", () => { goHero(hero.idx - 1); startHero(); });
+$("#heroNext").addEventListener("click", () => { goHero(hero.idx + 1); startHero(); });
+$("#heroDots").addEventListener("click", e => { const d = e.target.closest(".hero__dot"); if (d) { goHero(+d.dataset.i); startHero(); } });
+const heroEl = $(".hero");
+heroEl.addEventListener("mouseenter", () => clearInterval(hero.timer));
+heroEl.addEventListener("mouseleave", startHero);
+/* 모바일 스와이프 */
+let touchX = 0;
+heroEl.addEventListener("touchstart", e => { touchX = e.touches[0].clientX; clearInterval(hero.timer); }, { passive: true });
+heroEl.addEventListener("touchend", e => {
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 40) goHero(hero.idx + (dx < 0 ? 1 : -1));
+  startHero();
+});
+
+/* =========================================================
+   F. TABS – BEST(카테고리) / RECOMMENDED(해시태그)
+   ========================================================= */
+function setActiveTab(wrap, filter) {
+  $$(".tabs__btn", wrap).forEach(b => {
+    const on = b.dataset.filter === filter;
+    b.classList.toggle("is-active", on);
+    b.setAttribute("aria-selected", on);
+  });
+}
+function renderBest(filter = "all") {
+  const list = products.filter(p => p.category !== "set" && (filter === "all" || p.category === filter));
+  $("#bestGrid").innerHTML = list.length ? list.slice(0, 8).map(productCard).join("") : '<p class="empty">[등록된 상품이 없습니다]</p>';
+  setActiveTab($("#bestTabs"), filter);
+}
+function renderRec(tag = "promo") {
+  $("#recTrack").innerHTML = products.filter(p => p.rec.includes(tag)).map(productCard).join("");
+  $("#recTrack").scrollLeft = 0;
+  setActiveTab($("#recTabs"), tag);
+}
+$("#bestTabs").addEventListener("click", e => { const b = e.target.closest(".tabs__btn"); if (b) renderBest(b.dataset.filter); });
+$("#recTabs").addEventListener("click", e => { const b = e.target.closest(".tabs__btn"); if (b) renderRec(b.dataset.filter); });
+/* 카테고리 바로가기 / 메가메뉴 → BEST 탭 전환 */
+$$("[data-cat]").forEach(a => a.addEventListener("click", () => { renderBest(a.dataset.cat); closeDrawer(); }));
+/* RECOMMENDED 화살표 */
+const recStep = () => { const c = $("#recTrack").firstElementChild; return c ? c.offsetWidth + 20 : 300; };
+$("#recPrev").addEventListener("click", () => $("#recTrack").scrollBy({ left: -recStep() }));
+$("#recNext").addEventListener("click", () => $("#recTrack").scrollBy({ left: recStep() }));
+
+/* 담기 / 찜 (이벤트 위임) */
+let cart = 0;
+document.addEventListener("click", e => {
+  if (e.target.closest("[data-cart]")) { cart++; $("#cartCount").textContent = cart; }
+  const w = e.target.closest(".product-card__wish");
+  if (w) { const on = w.classList.toggle("is-on"); w.setAttribute("aria-pressed", on); }
+});
+
+/* =========================================================
+   G. ROUTINE / REVIEW / SNS
+   ========================================================= */
+function renderStatic() {
+  $("#routineList").innerHTML = routineSteps.map((s, i) => `
+    <li class="routine__step">
+      <span class="routine__num" aria-hidden="true"></span>
+      ${phImg("루틴 " + (i + 1) + "단계", "3:4", tones[i % 3])}
+      <div>
+        <p class="routine__name" data-slot="routine-${i + 1}-name">${s.name}</p>
+        <p class="routine__desc" data-slot="routine-${i + 1}-desc">${s.desc}</p>
+      </div>
+    </li>`).join("");
+
+  $("#reviewGrid").innerHTML = reviews.map(r => `
+    <article class="review-card">
+      ${phImg("포토리뷰", "4:3", tones[r.n % 3])}
+      <div class="review-card__body">
+        <p class="review-card__stars" aria-label="별점 ${r.stars}점">${"★".repeat(r.stars)}</p>
+        <p class="review-card__text" data-slot="review-${r.n}-text">${r.text}</p>
+        <div class="review-card__meta">
+          <span data-slot="review-${r.n}-author">${r.author}</span>
+          <span data-slot="review-${r.n}-product">${r.product}</span>
+        </div>
+      </div>
+    </article>`).join("");
+
+  $("#snsGrid").innerHTML = Array.from({ length: 6 }, (_, i) => `<a href="#" aria-label="인스타그램 게시물 ${i + 1}">${phImg("SNS 피드", "1:1", tones[i % 3])}</a>`).join("");
+}
+
+/* =========================================================
+   H. HEADER / DRAWER / TOP BUTTON / TOP BANNER
+   ========================================================= */
+const drawer = $("#drawer");
+function openDrawer()  { drawer.classList.add("is-open"); drawer.setAttribute("aria-hidden", "false"); document.body.style.overflow = "hidden"; }
+function closeDrawer() { drawer.classList.remove("is-open"); drawer.setAttribute("aria-hidden", "true"); document.body.style.overflow = ""; }
+$("#burgerBtn").addEventListener("click", openDrawer);
+$$("[data-close]", drawer).forEach(el => el.addEventListener("click", closeDrawer));
+$$(".drawer__link", drawer).forEach(el => el.addEventListener("click", closeDrawer));
+$$(".drawer__acc-btn", drawer).forEach(b => b.addEventListener("click", () => b.parentElement.classList.toggle("is-open")));
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeDrawer(); });
+
+$("#topBannerClose").addEventListener("click", () => $("#topBanner").remove());
+
+const topBtn = $("#topBtn");
+window.addEventListener("scroll", () => topBtn.classList.toggle("is-show", window.scrollY > 600), { passive: true });
+topBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+/* =========================================================
+   I. 라벨 ↔ 가안 문구 토글 (작업용)
+   - 정적 요소: data-draft 속성이 있으면 교체
+   ========================================================= */
+$$("[data-draft]").forEach(el => el.dataset.label = el.innerHTML);
+$("#devToggle").addEventListener("click", () => {
+  showDraft = !showDraft;
+  document.body.classList.toggle("mode-label", !showDraft);
+  $("#devToggle").textContent = showDraft ? "라벨 보기" : "가안 문구 보기";
+  $$("[data-draft]").forEach(el => el.innerHTML = showDraft ? el.dataset.draft : el.dataset.label);
+  bindIngredient();
+  renderHero();
+});
+
+/* =========================================================
+   J. INIT
+   ========================================================= */
+bindIngredient();
+renderHero();
+startHero();
+renderBest();
+renderRec();
+renderStatic();
+</script>
+</body>
+</html>
